@@ -1,14 +1,15 @@
 const express = require("express");
+
+const routeClient = require("./routes/client/index.route");
+
+
 const app = express();
 const post = 3000;
 
-app.get("/", (req, res) => {
-    res.send("Trang chủ");
-});
+app.set("views","./views");
+app.set("view engine", "pug");
 
-app.get("/products", (req, res) => {
-    res.send("Trang danh sách sản phẩm");
-});
+routeClient.index(app);
 
 app.listen(post, () => {
     console.log(`App listening on port ${post}`);
