@@ -1,9 +1,8 @@
-module.exports.index = (app) => {
-    app.get("/", (req, res) => {
-        res.render("client/pages/home/index");
-    });
+const homeRoute = require("./home.route");
+const productRoute = require("./product.route");
 
-    app.get("/products", (req, res) => {
-        res.render("client/pages/products/index");
-    });
+module.exports.index = (app) => {
+    app.use("/", homeRoute);
+
+    app.use("/products", productRoute);
 }
