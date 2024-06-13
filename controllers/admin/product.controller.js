@@ -29,13 +29,37 @@ module.exports.index = async (req, res) => {
         keyword = req.query.keyword;
     }
     // Hết tìm kiếm
-    const products = await Product.find(find);
+
+    // Phân trang
+    const pagination = {
+        currentPage : 1,
+        limitItems : 4
+    };
+    if(req.query.page){
+        pagination.currentPage = parseInt(req.query.page);
+    }
+    pagination.skip = (pagination.currentPage-1)*pagination.limitItems;
+    
+    const countProducts = await Product.countDocuments(find);
+    const totalPage = Math.ceil(countProducts/pagination.limitItems);
+    pagination.totalPage = totalPage;
+
+    // Hết phân trang
+
+    const products = await Product
+        .find(find)
+        .limit(pagination.limitItems)
+        .skip(pagination.skip);
+
+
+    
     // console.log(products);
     res.render("admin/pages/products/index",{
         pageTitle : "Trang danh sách sản phẩm ",
         products : products,
         keyword : keyword,
-        filterStatus : filterStatus
+        filterStatus : filterStatus,
+        pagination:pagination
     }
     );
 }
