@@ -72,6 +72,13 @@ module.exports.changeStatus = async (req, res) => {
 }
 // [PATCH] /admin/products/change-multi
 module.exports.changeMulti = async (req, res) => {
+    const {status,ids} = req.body;
+    await Product.updateMany({
+        _id : ids
+
+    },{
+        status : status
+    });
     res.json({
       code: 200
     });

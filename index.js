@@ -1,6 +1,7 @@
 const express = require("express");
 
 require('dotenv').config()
+const bodyParser = require('body-parser');
 
 const database = require("./config/database");
 database.connect();
@@ -17,6 +18,8 @@ app.set("views", "./views");
 app.set("view engine", "pug");
 
 app.use(express.static('public'));
+// parse application/json
+app.use(bodyParser.json());
 
 
 app.locals.prefixAdmin = systemConfig.prefixAdmin;// chỉ dùng trong các file pug
