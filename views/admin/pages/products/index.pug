@@ -32,6 +32,8 @@ block main
       table.table.table-hover.table-sm
         thead
           tr
+            th
+              input(name="checkAll" type = "checkbox")
             th STT
             th Hình ảnh
             th Tiêu đề
@@ -40,7 +42,9 @@ block main
             th Hành động
         tbody
           each item, index in products
-            tr 
+            tr
+              td
+                input(name="checkItem" type = "checkbox") 
               td #{index+1}
               td
                 img(

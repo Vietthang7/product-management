@@ -66,27 +66,52 @@ if (listButtonPagination.length > 0) {
 
 // End Pagination
 
-const listButtonChangeStatus =  document.querySelectorAll("[button-change-status]");
-if(listButtonChangeStatus.length>=1){
-    listButtonChangeStatus.forEach(button =>{
-        button.addEventListener("click",()=>{
+const listButtonChangeStatus = document.querySelectorAll("[button-change-status]");
+if (listButtonChangeStatus.length >= 1) {
+    listButtonChangeStatus.forEach(button => {
+        button.addEventListener("click", () => {
             const link = button.getAttribute("link");
-           
-            fetch(link,{
-                method : "PATCH",
-                headers: {
-                    "Content-Type": "application/json",
-                  }
-            })
-            .then(res=>res.json())
-            .then(data =>{
-                if(data.code==200){
-                    window.location.reload();
-                }
-            })
+
+            fetch(link, {
+                    method: "PATCH",
+                    headers: {
+                        "Content-Type": "application/json",
+                    }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.code == 200) {
+                        window.location.reload();
+                    }
+                })
 
         });
 
     });
-
 }
+
+
+// Check Item
+const inputcheckAll = document.querySelector("input[name='checkAll']");
+if (inputcheckAll) {
+    const listInputCheckItem = document.querySelectorAll("input[name='checkItem']");
+    // Bắt sự kiện cho nút checkAll
+    inputcheckAll.addEventListener("click", () => {
+        listInputCheckItem.forEach(inputCheckItem => {
+            inputCheckItem.checked = inputcheckAll.checked;
+
+        });
+    });
+    // Bắt sự kiện vào nút checkItem
+    listInputCheckItem.forEach(inputCheckItem => {
+        inputCheckItem.addEventListener("click", () => {
+            const listInputCheckItemChecked = document.querySelectorAll("input[name='checkItem']:checked");
+            if (listInputCheckItemChecked.length == listInputCheckItem.length) {
+                inputcheckAll.checked = true;
+            } else {
+                inputcheckAll.checked = false;
+            }
+        });
+    });
+}
+// End Check Item

@@ -65,4 +65,7 @@ module.exports.changeStatus = async(req,res) =>{
     res.json({
       code : 200
     });
+    // res.json() trả về api
+    // res.redirect trả về route
+    // res.render trả về file pug
 }
