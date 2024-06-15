@@ -38,8 +38,8 @@ module.exports.index = async (req, res) => {
 
     const products = await Product
         .find(find)
-        .limit(pagination.limitItems)
-        .skip(pagination.skip);
+        .limit(pagination.limitItems)// số lượng tối thiểu 
+        .skip(pagination.skip);// bỏ qua 
 
 
     
@@ -53,7 +53,7 @@ module.exports.index = async (req, res) => {
     }
     );
 }
-// [GET] /admin/products/change-status/:statusChange/:id
+// [PATCH] /admin/products/change-status/:statusChange/:id
 module.exports.changeStatus = async(req,res) =>{
     const {id,statusChange} = req.params;
     await Product.updateOne({
@@ -62,5 +62,7 @@ module.exports.changeStatus = async(req,res) =>{
     },{
        status : statusChange
     });
-    res.redirect('back');
+    res.json({
+      code : 200
+    });
 }
