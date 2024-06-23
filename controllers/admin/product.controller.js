@@ -97,6 +97,5 @@ module.exports.deleteItem = async (req, res) => {
     });
     res.json({
         code: 200
-        
     });
 }
