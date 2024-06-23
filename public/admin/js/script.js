@@ -160,18 +160,18 @@ const listButtonDelete = document.querySelectorAll("[button-delete]");
 if (listButtonDelete.length > 0) {
     listButtonDelete.forEach(button => {
         button.addEventListener("click", () => {
-            const id = button.getAttribute("button-delete");
+            const link = button.getAttribute("button-delete");
+            console.log(link);
             
-            fetch(`/admin/products/delete/${id}`, {
+            fetch(link, {
                 method: "PATCH"
-                // cris
             })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.code == 200) {
-                        window.location.reload();
-                    }
-                })
+            .then(res => res.json())
+            .then(data => {
+                if (data.code == 200) {
+                    window.location.reload();
+                }
+            })
         });
     });
 }
