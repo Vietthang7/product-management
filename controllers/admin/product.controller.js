@@ -92,9 +92,11 @@ module.exports.deleteItem = async (req, res) => {
     await Product.updateOne({
         _id: id
     },{
+
         deleted : true
     });
     res.json({
         code: 200
+        
     });
 }
