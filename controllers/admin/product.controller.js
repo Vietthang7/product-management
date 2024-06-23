@@ -76,12 +76,26 @@ module.exports.changeMulti = async (req, res) => {
         status,
         ids
     } = req.body;
-    await Product.updateMany({
-        _id: ids
+    switch(status){
+        case "active" :
+        case "inactive":
+            await Product.updateMany({
+                _id : ids
+            },{
+                status : status 
+            });
+            break;
+        case "delete" :
+            await Product.updateMany({
+                _id : ids
+            },{
+                deleted : true
 
-    }, {
-        status: status
-    });
+            });
+        default :
+            break;
+
+    }
     res.json({
         code: 200
     });
@@ -91,9 +105,9 @@ module.exports.deleteItem = async (req, res) => {
     const id = req.params.id;
     await Product.updateOne({
         _id: id
-    },{
+    }, {
 
-        deleted : true
+        deleted: true
     });
     res.json({
         code: 200
