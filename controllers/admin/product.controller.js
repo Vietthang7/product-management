@@ -38,7 +38,10 @@ module.exports.index = async (req, res) => {
     const products = await Product
         .find(find)
         .limit(pagination.limitItems) // số lượng tối thiểu 
-        .skip(pagination.skip); // bỏ qua 
+        .skip(pagination.skip) // bỏ qua
+        .sort({
+            position : "desc"
+        });
 
 
 
@@ -111,5 +114,18 @@ module.exports.deleteItem = async (req, res) => {
     });
     res.json({
         code: 200
+    });
+}
+// [PATCH]/admin/products/change-position/:id
+module.exports.changePosition = async(req,res)=>{
+    const id = req.params.id;
+    const position = req.params.position;
+    await Product.updateOne({
+        _id:id
+    },{
+        position:position
+    });
+    res.json({
+        code:200
     });
 }

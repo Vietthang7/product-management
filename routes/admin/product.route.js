@@ -8,6 +8,7 @@ router.patch("/change-status/:statusChange/:id", controller.changeStatus);
 router.patch("/change-multi", controller.changeMulti);
 
 router.patch("/delete/:id", controller.deleteItem);
+router.patch("/change-position/:id",controller.changePosition);
 
 
 module.exports = router;
