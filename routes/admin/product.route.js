@@ -9,6 +9,8 @@ router.patch("/change-multi", controller.changeMulti);
 
 router.patch("/delete/:id", controller.deleteItem);
 router.patch("/change-position/:id",controller.changePosition);
+router.get("/create",controller.create);
+router.post("/create",controller.createPost);
 
 
 module.exports = router;

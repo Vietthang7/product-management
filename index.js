@@ -34,6 +34,8 @@ app.set("view engine", "pug");
 app.use(express.static('public'));
 // parse application/json
 app.use(bodyParser.json());
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }));
 
 
 app.locals.prefixAdmin = systemConfig.prefixAdmin;// chỉ dùng trong các file pug

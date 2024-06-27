@@ -9,8 +9,11 @@ const productList = new mongoose.Schema({
     thumbnail: String,
     status: String,
     position: Number,
-    deleted: Boolean,
+    deleted: {
+        type: Boolean,
+        default: false
+    },
 });
-const Product = mongoose.model('Product',productList ,"products");
+const Product = mongoose.model('Product', productList, "products");
 
 module.exports = Product;
