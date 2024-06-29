@@ -2,12 +2,10 @@ const express = require("express");
 
 require('dotenv').config()
 const bodyParser = require('body-parser');
-// const flash = require('express-flash');
-// const cookieParser = require('cookie-parser');
-// const session = require('express-session');
 const flash = require('express-flash');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+const methodOverride = require('method-override');
 
 const database = require("./config/database");
 database.connect();
@@ -26,7 +24,7 @@ const port = process.env.PORT;
 app.use(cookieParser('HHKALKS'));
 app.use(session({ cookie: { maxAge: 60000 }}));
 app.use(flash());
-
+app.use(methodOverride('_method'));
 //End Flash
 app.set("views", "./views");
 app.set("view engine", "pug");
