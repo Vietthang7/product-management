@@ -69,7 +69,7 @@ module.exports.detail = async (req, res) => {
     status: "active"
   });
 
-  console.log(product);
+//   console.log(product);
 
   if(product) {
     res.render("client/pages/products/detail", {
