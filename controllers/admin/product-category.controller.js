@@ -8,12 +8,13 @@ module.exports.index = (req, res) => {
   );
 }
 // [GET] /admin/products-category/create
-module.exports.index = (req, res) => {
+module.exports.create = (req, res) => {
   res.render("admin/pages/products-category/create",{
       pageTitle : "Thêm mới danh mục sản phẩm"
   }
   );
 }
+
 // [POST] /admin/products-category/create
 module.exports.createPost = async (req, res) => {
   if (req.body.position) {

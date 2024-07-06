@@ -9,7 +9,7 @@ const validate = require("../../validates/admin/product.validate");
 
 const controller = require("../../controllers/admin/product-category.controller");
 router.get("/",controller.index);
-router.get("/create",controller.index);
+router.get("/create",controller.create);
 router.post("/create",
   upload.single('thumbnail'),
   uploadToCloud.uploadSingle,
