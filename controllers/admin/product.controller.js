@@ -128,7 +128,7 @@ module.exports.deleteItem = async (req, res) => {
 // [PATCH]/admin/products/change-position/:id
 module.exports.changePosition = async (req, res) => {
   const id = req.params.id;
-  const position = req.params.position;
+  const position = req.body.position;
   await Product.updateOne({
     _id: id
   }, {
