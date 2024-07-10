@@ -1,0 +1,33 @@
+extends ../../layouts/default.pug
+
+block main
+  h1(class="mb-4") Chỉnh sửa nhóm quyền
+
+  form(
+    action=`/${prefixAdmin}/roles/edit/${records.id}?_method=PATCH`
+    method="POST"
+  )
+    div(class="form-group")
+      label(for="title") Tiêu đề
+      input(
+        type="text"
+        class="form-control"
+        id="title"
+        name="title"
+        required
+        value=records.title
+      )
+    div(class="form-group")
+      label(for="desc") Mô tả
+      input(
+        type="text"
+        class="form-control"
+        id="desc"
+        name="description"
+        value=records.description
+      )
+    div(class="form-group")
+      button(
+        type="submit"
+        class="btn btn-primary"
+      ) Cập nhật
