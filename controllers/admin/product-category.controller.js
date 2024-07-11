@@ -1,6 +1,7 @@
 const ProductCategory = require("../../models/product-category.model")
 const systemConfig = require("../../config/system");
 const createTreeHelper = require("../../helpers/createTree.helper");
+const paginationHelper = require("../../helpers/pagination.helper");
 // [GET] /admin/products-category
 module.exports.index = async (req, res) => {
   const find = {
@@ -30,13 +31,20 @@ module.exports.index = async (req, res) => {
     keyword = req.query.keyword;
   }
   //Hết tìm kiếm
+
+  //Phân trang
+  const pagination = await paginationHelper(req,find);
+  //Hết Phân trang
   const records = await ProductCategory
-    .find(find);
+    .find(find)
+    .limit(pagination.limitItems)
+    .skip(pagination.skip)
   res.render("admin/pages/products-category/index", {
     pageTitle: "Danh mục sản phẩm",
     records: records,
     keyword: keyword,
-    filterStatus: filterStatus
+    filterStatus: filterStatus,
+    pagination: pagination
   }
   );
 }
