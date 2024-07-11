@@ -107,7 +107,6 @@ block main
                 ) Sửa
                 button(
                   class="btn btn-danger btn-sm ml-1"
-                  button-delete
-                  data-id=item.id
+                  button-delete=`/${prefixAdmin}/products-category/delete/${item.id}`
                 ) Xóa
   +pagination(pagination)
