@@ -73,11 +73,11 @@ if (listButtonChangeStatus.length >= 1) {
             const link = button.getAttribute("link");
 
             fetch(link, {
-                    method: "PATCH",
-                    headers: {
-                        "Content-Type": "application/json",
-                    }
-                })
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            })
                 .then(res => res.json())
                 .then(data => {
                     if (data.code == 200) {
@@ -138,19 +138,19 @@ if (boxActions) {
             const link = boxActions.getAttribute("box-actions");
 
             fetch(link, {
-                    method: "PATCH",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(dataChangeMulti),
-                })
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(dataChangeMulti),
+            })
                 .then(res => res.json())
                 .then(data => {
                     if (data.code == 200) {
                         window.location.reload();
                     }
                 })
-        } else {}
+        } else { }
     });
 }
 //  End Box Actions
@@ -164,8 +164,8 @@ if (listButtonDelete.length > 0) {
             console.log(link);
 
             fetch(link, {
-                    method: "PATCH"
-                })
+                method: "PATCH"
+            })
                 .then(res => res.json())
                 .then(data => {
                     if (data.code == 200) {
@@ -194,17 +194,17 @@ if (listInputPosition.length > 0) {
                     position: position
                 })
             })
-            .then(res =>res.json())
-            .then(data =>{
-                console.log(data);
-            })
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data);
+                })
         });
     })
 }
 // Hết thay đổi vị trí
 // show-alert
 const showAlert = document.querySelector("[show-alert]");
-if(showAlert){
+if (showAlert) {
     let time = showAlert.getAttribute("show-alert") || 3000;
     time = parseInt(time);
     setTimeout(() => {
@@ -214,13 +214,13 @@ if(showAlert){
 // End show-alert
 //Upload Image
 const uploadImage = document.querySelector("[upload-image]");
-if(uploadImage){
+if (uploadImage) {
     const uploadImageInput = uploadImage.querySelector("[upload-image-input]");
     const uploadImagePreview = uploadImage.querySelector("[upload-image-preview]");
 
-    uploadImageInput.addEventListener("change",() => {
+    uploadImageInput.addEventListener("change", () => {
         const file = uploadImageInput.files[0];
-        if(file){
+        if (file) {
             uploadImagePreview.src = URL.createObjectURL(file);
         }
     })
@@ -228,33 +228,83 @@ if(uploadImage){
 // End Upload Image
 // Sort 
 const sort = document.querySelector("[sort]");
-if(sort){
+if (sort) {
     let url = new URL(window.location.href);
     const select = sort.querySelector("[sort-select]");
-    select.addEventListener("change",()=>{
-        const [sortKey,sortValue] = select.value.split("-");
-        if(sortKey && sortValue){
-            url.searchParams.set("sortKey",sortKey);
-            url.searchParams.set("sortValue",sortValue);
+    select.addEventListener("change", () => {
+        const [sortKey, sortValue] = select.value.split("-");
+        if (sortKey && sortValue) {
+            url.searchParams.set("sortKey", sortKey);
+            url.searchParams.set("sortValue", sortValue);
             window.location.href = url.href;
         }
     })
     // Thêm selected mặc định cho option
     const defaultSortKey = url.searchParams.get("sortKey");
     const defaultSortValue = url.searchParams.get("sortValue");
-    if(defaultSortKey && defaultSortValue){
+    if (defaultSortKey && defaultSortValue) {
         const optionSelected = select.querySelector(`option[value ="${defaultSortKey}-${defaultSortValue}"]`);
         optionSelected.selected = true;
         // optionSelected.setAttribute("selected", true);
     }
     //Tính năng clear
     const buttonClear = sort.querySelector("[sort-clear]");
-    if(buttonClear){
-        buttonClear.addEventListener("click",()=>{
-        url.searchParams.delete("sortKey");
-        url.searchParams.delete("sortValue");
-        window.location.href = url.href;
+    if (buttonClear) {
+        buttonClear.addEventListener("click", () => {
+            url.searchParams.delete("sortKey");
+            url.searchParams.delete("sortValue");
+            window.location.href = url.href;
         })
     }
 }
 //End Sort
+
+//Phân quyền
+const tablePermissions = document.querySelector("[table-permissions]");
+if(tablePermissions) {
+  const buttonSubmit = document.querySelector("[button-submit]");
+  buttonSubmit.addEventListener("click", () => {
+    const roles = [];
+
+    const listElementRoleId = tablePermissions.querySelectorAll("[role-id]");
+    for (const element of listElementRoleId) {
+      const roleId = element.getAttribute("role-id");
+      const role = {
+        id: roleId,
+        permissions: []
+      };
+
+      const listInputChecked = tablePermissions.querySelectorAll(`input[data-id="${roleId}"]:checked`);
+
+      listInputChecked.forEach(input => {
+        const dataName = input.getAttribute("data-name");
+        role.permissions.push(dataName);
+      });
+
+      roles.push(role);
+    }
+
+    const path = buttonSubmit.getAttribute("button-submit");
+
+    fetch(path, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(roles)
+    })
+      .then(res => res.json())
+      .then(data => {
+        if(data.code == 200) {
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: data.message,
+            showConfirmButton: false,
+            timer: 1500
+          });
+        }
+      })
+  });
+}
+//Hết Phân quyền 

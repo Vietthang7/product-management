@@ -3,15 +3,59 @@ const systemConfig = require("../../config/system");
 const createTreeHelper = require("../../helpers/createTree.helper");
 // [GET] /admin/products-category
 module.exports.index = async (req, res) => {
-  const records = await ProductCategory.find({
+  const find = {
     deleted: false
-  });
-  // console.log(records);
+  };
+  const filterStatus = [{
+    label: "Tất cả",
+    value: ""
+  },
+  {
+    label: "Đang hoạt động",
+    value: "active"
+  },
+  {
+    label: "Dừng hoạt động",
+    value: "inactive"
+  },
+  ];
+  if (req.query.status) {
+    find.status = req.query.status;
+  }
+  // Tìm kiếm
+  let keyword = "";
+  if (req.query.keyword) {
+    const regex = new RegExp(req.query.keyword, "i");
+    find.title = regex;
+    keyword = req.query.keyword;
+  }
+  //Hết tìm kiếm
+  const records = await ProductCategory
+    .find(find);
   res.render("admin/pages/products-category/index", {
     pageTitle: "Danh mục sản phẩm",
-    records: records
+    records: records,
+    keyword: keyword,
+    filterStatus: filterStatus
   }
   );
+}
+// [PATCH] /admin/products-category/change-status/:statusChange/:id
+module.exports.changeStatus = async (req, res) => {
+  const {
+    id, statusChange
+  } = req.params;
+  await ProductCategory.updateOne({
+    _id: id
+  }, {
+    status: statusChange
+  });
+  req.flash('success', 'Cập nhật trạng thái thành công!');
+
+  res.json({
+    code: 200
+  });
+
 }
 // [GET] /admin/products-category/create
 module.exports.create = async (req, res) => {

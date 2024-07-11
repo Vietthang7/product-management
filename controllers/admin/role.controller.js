@@ -4,17 +4,17 @@ const systemConfig = require("../../config/system");
 //[GET] /admin/roles
 module.exports.index = async (req, res) => {
   const records = await Role.find({
-    deleted:false
+    deleted: false
   });
-  res.render("admin/pages/roles/index",{
-    pageTitle : "Nhóm quyền",
-    records:records
+  res.render("admin/pages/roles/index", {
+    pageTitle: "Nhóm quyền",
+    records: records
   });
 }
 //[GET] /admin/roles/create
 module.exports.create = async (req, res) => {
-  res.render("admin/pages/roles/create",{
-    pageTitle : "Tạo mới nhóm quyền",
+  res.render("admin/pages/roles/create", {
+    pageTitle: "Tạo mới nhóm quyền",
   });
 };
 //[POST] /admin/roles/create
@@ -33,7 +33,7 @@ module.exports.edit = async (req, res) => {
     });
     res.render("admin/pages/roles/edit", {
       pageTitle: "Chỉnh sửa nhóm quyền",
-      records:records
+      records: records
     }
     );
 
@@ -57,3 +57,34 @@ module.exports.editPatch = async (req, res) => {
     res.redirect(`/${systemConfig.prefixAdmin}/roles`);
   }
 };
+// [GET] /admin/roles/permissions
+module.exports.permissions = async (req, res) => {
+  const records = await Role.find({
+    deleted: false
+  });
+
+  res.render("admin/pages/roles/permissions", {
+    pageTitle: "Phân quyền",
+    records: records
+  });
+};
+
+// [PATCH] /admin/roles/permissions
+module.exports.permissionsPatch = async (req, res) => {
+  const roles = req.body;
+
+  for (const role of roles) {
+    await Role.updateOne({
+      _id: role.id,
+      deleted: false
+    }, {
+      permissions: role.permissions
+    });
+  }
+
+  res.json({
+    code: 200,
+    message: "Cập nhật thành công!"
+  });
+};
+

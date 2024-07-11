@@ -1,6 +1,45 @@
 extends ../../layouts/default.pug
+include ../../mixins/filter-status.pug
+include ../../mixins/search.pug
+include ../../mixins/pagination.pug
+include ../../mixins/box-actions.pug
 block main
   h1(class="mb-4") Danh mục sản phẩm
+  .card.mb-3
+    .card-header Bộ lọc và Tìm kiếm
+    .card-body
+      .row
+        .col-6
+          +filter-status(filterStatus)
+        .col-6
+          +search(keyword)
+
+  //- .card.mb-3
+  //-   .card-header Hành động
+  //-     .card-body
+  //-       +box-actions(`/${prefixAdmin}/products-category/change-multi`)
+  //- .card.mb-3
+  //-   .card-header Sắp xếp
+  //-   .card-body
+  //-     .row
+  //-       .col-5
+  //-         div(sort)
+  //-           select(
+  //-             class="form-control"
+  //-             name="sort"
+  //-             sort-select
+  //-           )
+  //-             option(value="position-desc") Vị trí giảm dần
+  //-             option(value="position-asc") Vị trí tăng dần
+  //-             option(value="price-desc") Giá giảm dần
+  //-             option(value="price-asc") Giá tăng dần
+  //-             option(value="title-asc") Tiêu đề A - Z
+  //-             option(value="title-desc") Tiêu đề Z - A
+
+  //-           button(
+  //-             class="btn btn-danger mt-2"
+  //-             sort-clear
+  //-           ) Clear
   .card.mb-3
     .card-header Danh sách
     .card-body
@@ -46,19 +85,15 @@ block main
                 )
               td
                 if (item.status === "active")
-                  a(
-                    href="javascript:;"
+                  button(
+                    link=`/${prefixAdmin}/products-category/change-status/inactive/${item.id}` 
                     class="badge badge-success"
-                    data-status="active"
-                    data-id=item.id
                     button-change-status
                   ) Hoạt động
                 else
-                  a(
-                    href="javascript:;"
+                  button(
+                    link=`/${prefixAdmin}/products-category/change-status/active/${item.id}` 
                     class="badge badge-danger"
-                    data-status="inactive"
-                    data-id=item.id
                     button-change-status
                   ) Dừng hoạt động
               td
