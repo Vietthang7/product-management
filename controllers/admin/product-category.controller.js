@@ -33,7 +33,7 @@ module.exports.index = async (req, res) => {
   //Hết tìm kiếm
 
   //Phân trang
-  const pagination = await paginationHelper(req,find);
+  const pagination = await paginationHelper(req, find);
   //Hết Phân trang
   const records = await ProductCategory
     .find(find)
@@ -156,14 +156,27 @@ module.exports.detail = async (req, res) => {
   }
 }
 // [PATCH] /admin/products-category/delete/:id
-module.exports.deleteItem = async(req,res) =>{
+module.exports.deleteItem = async (req, res) => {
   const id = req.params.id;
   await ProductCategory.updateOne({
-    _id:id
-  },{
-    deleted:true
+    _id: id
+  }, {
+    deleted: true
   });
   req.flash('success', 'Cập nhật trạng thái thành công!');
+  res.json({
+    code: 200,
+  });
+};
+// [PATCH] /admin/products-category/change-position/:id
+module.exports.changePosition = async (req, res) => {
+  const id = req.params.id;
+  const position = req.body.position;
+  await ProductCategory.updateOne({
+    _id: id
+  }, {
+    position: position
+  });
   res.json({
     code: 200,
   });

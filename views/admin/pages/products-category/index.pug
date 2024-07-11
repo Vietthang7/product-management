@@ -77,6 +77,7 @@ block main
               td #{item.title}
               td
                 input(
+                  link=`/${prefixAdmin}/products-category/change-position/${item.id}`
                   type="number"
                   value=item.position
                   style="width: 60px"
