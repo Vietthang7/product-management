@@ -181,3 +181,32 @@ module.exports.changePosition = async (req, res) => {
     code: 200,
   });
 };
+// [PATCH] /admin/products-category/change-multi
+module.exports.changeMulti = async (req, res) => {
+  const {
+    status,
+    ids
+  }= req.body;
+  switch (status) {
+    case "active":
+    case "inactive":
+      await ProductCategory.updateMany({
+        _id:ids
+      },{
+        status:status
+      });
+      break;
+    case "delete":
+      await ProductCategory.updateMany({
+        _id:ids
+      },{
+        deleted:true
+      });
+    default:
+      break;
+  }
+  req.flash('success', 'Cập nhật trạng thái thành công!');
+  res.json({
+    code: 200
+  });
+}

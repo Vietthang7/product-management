@@ -14,10 +14,10 @@ block main
         .col-6
           +search(keyword)
 
-  //- .card.mb-3
-  //-   .card-header Hành động
-  //-     .card-body
-  //-       +box-actions(`/${prefixAdmin}/products-category/change-multi`)
+  .card.mb-3
+    .card-header Hành động
+      .card-body
+        +box-actions(`/${prefixAdmin}/products-category/change-multi`)
   //- .card.mb-3
   //-   .card-header Sắp xếp
   //-   .card-body
@@ -50,12 +50,11 @@ block main
             href=`/${prefixAdmin}/products-category/create`
             class="btn btn-outline-success"
           ) + Thêm mới
-
-      table(
-        class="table table-hover table-sm"
-      )
+      table.table.table-hover.table-sm
         thead
           tr
+            th
+              input(name="checkAll" type = "checkbox")
             th STT
             th Hình ảnh
             th Tiêu đề
@@ -66,6 +65,12 @@ block main
         tbody
           each item, index in records
             tr
+              td
+                input(
+                  name="checkItem"
+                  type ="checkbox"
+                  value = item.id
+                )
               td #{index + 1}
               td
                 img(

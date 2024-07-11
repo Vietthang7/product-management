@@ -108,7 +108,6 @@ module.exports.changeMulti = async (req, res) => {
       });
     default:
       break;
-
   }
   res.json({
     code: 200
