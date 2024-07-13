@@ -1,6 +1,4 @@
 const mongoose = require('mongoose');
-
-
 const accountShema = new mongoose.Schema({
     fullName : String,
     email : String,
@@ -17,6 +15,6 @@ const accountShema = new mongoose.Schema({
 },{
     timestamps: true // Tự động thêm trường createdAt và updatedAt (https://mongoosejs.com/docs/timestamps.html)
 });
-const Account = mongoose.model('Account', accountShema, "account");
+const Account = mongoose.model('Account', accountShema, "accounts");
 
 module.exports = Account;
