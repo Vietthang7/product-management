@@ -3,6 +3,7 @@ const productRoute = require("./product.route");
 const systemConfig = require("../../config/system");
 const productCategoryRoute = require("./product-category.route");
 const rolesRoute = require("./role.route");
+const accountsRoute = require("./account.route");
 
 module.exports.index = (app) => {
     const path = `/${systemConfig.prefixAdmin}`;
@@ -12,5 +13,6 @@ module.exports.index = (app) => {
     app.use(`${path}/products`, productRoute);
     app.use(`${path}/products-category`, productCategoryRoute);
     app.use(`${path}/roles`, rolesRoute);
+    app.use(`${path}/accounts`, accountsRoute);
 }
 
