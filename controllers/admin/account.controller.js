@@ -4,9 +4,20 @@ const systemConfig = require("../../config/system");
 const Account = require("../../models/accounts.model");
 const generateHelper = require("../../helpers/generate.helper");
 // [GET] /admin/accounts
-module.exports.index = (req, res) => {
+module.exports.index = async (req, res) => {
+  const records = await Account.find({
+    deleted:false
+  });
+  for(const record of records) {
+    const role = await Role.findOne({
+      _id : record.role_id,
+      deleted:false
+    });
+    record.roleTitle = role.title;
+  }
   res.render("admin/pages/accounts/index",{
-      pageTitle : "Tài khoản admin"
+      pageTitle : "Tài khoản admin",
+      records: records
   }
   );
 }
