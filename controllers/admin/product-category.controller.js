@@ -157,56 +157,68 @@ module.exports.detail = async (req, res) => {
 }
 // [PATCH] /admin/products-category/delete/:id
 module.exports.deleteItem = async (req, res) => {
-  const id = req.params.id;
-  await ProductCategory.updateOne({
-    _id: id
-  }, {
-    deleted: true
-  });
-  req.flash('success', 'Cập nhật trạng thái thành công!');
-  res.json({
-    code: 200,
-  });
+  try {
+    const id = req.params.id;
+    await ProductCategory.updateOne({
+      _id: id
+    }, {
+      deleted: true
+    });
+    req.flash('success', 'Cập nhật trạng thái thành công!');
+    res.json({
+      code: 200,
+    });
+  } catch (error) {
+    res.redirect(`${systemConfig.prefixAdmin}/products-category`);
+  }
 };
 // [PATCH] /admin/products-category/change-position/:id
 module.exports.changePosition = async (req, res) => {
-  const id = req.params.id;
-  const position = req.body.position;
-  await ProductCategory.updateOne({
-    _id: id
-  }, {
-    position: position
-  });
-  res.json({
-    code: 200,
-  });
+  try {
+    const id = req.params.id;
+    const position = req.body.position;
+    await ProductCategory.updateOne({
+      _id: id
+    }, {
+      position: position
+    });
+    res.json({
+      code: 200,
+    });
+  } catch (error) {
+    res.redirect(`${systemConfig.prefixAdmin}/products-category`);
+  }
 };
 // [PATCH] /admin/products-category/change-multi
 module.exports.changeMulti = async (req, res) => {
-  const {
-    status,
-    ids
-  }= req.body;
-  switch (status) {
-    case "active":
-    case "inactive":
-      await ProductCategory.updateMany({
-        _id:ids
-      },{
-        status:status
-      });
-      break;
-    case "delete":
-      await ProductCategory.updateMany({
-        _id:ids
-      },{
-        deleted:true
-      });
-    default:
-      break;
+  try {
+    const {
+      status,
+      ids
+    }= req.body;
+    switch (status) {
+      case "active":
+      case "inactive":
+        await ProductCategory.updateMany({
+          _id:ids
+        },{
+          status:status
+        });
+        break;
+      case "delete":
+        await ProductCategory.updateMany({
+          _id:ids
+        },{
+          deleted:true
+        });
+      default:
+        break;
+    }
+    req.flash('success', 'Cập nhật trạng thái thành công!');
+    res.json({
+      code: 200
+    });
+  } catch (error) {
+    res.redirect(`${systemConfig.prefixAdmin}/products-category`);
   }
-  req.flash('success', 'Cập nhật trạng thái thành công!');
-  res.json({
-    code: 200
-  });
 }
