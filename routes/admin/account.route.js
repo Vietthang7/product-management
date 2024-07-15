@@ -23,4 +23,8 @@ router.patch(
   validate.createPostAccount,
   controller.editPatch
 );
+router.get("/detail/:id",controller.detail);
+router.patch("/delete/:id",controller.deleteItem);
+router.patch("/change-status/:statusChange/:id", controller.changeStatus);
+router.patch("/change-multi", controller.changeMulti);
 module.exports = router;

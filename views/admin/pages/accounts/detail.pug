@@ -1,0 +1,27 @@
+extends ../../layouts/default.pug
+
+block main
+  if (account.fullName)
+    h1 Tên:
+    h2(class="mb-4") #{account.fullName}
+  if (account.avatar)
+    div(class="mb-4") Ảnh:
+      img(
+        src=account.avatar
+        style="width: 150px"
+      )
+  if (account.email)
+    h3(class="mb-4") Email: #{account.email}
+  if (account.phone)
+    h3(class="mb-4") SĐT: #{account.phone}
+  if (account.status)
+    div(class="mb-4")
+      span Trạng thái:
+      if (account.status === "active")
+        span(class="badge badge-success") Hoạt động
+      else
+        span(class="badge badge-danger") Dừng hoạt động
+  if (roles.title)
+    div(class="mb-4") Quyền: #{roles.title}
+  if (roles.description)
+    div(class="mb-4") Loại quyền: !{roles.description}
