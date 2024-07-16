@@ -54,7 +54,7 @@ module.exports.editPatch = async (req, res) => {
         _id: id,
         deleted: false
       }, req.body);
-      req.flash("success", "Cập nhật sản phẩm thành công!");
+      req.flash("success", "Cập nhật thành công!");
       res.redirect("back");
 
     } catch (error) {
