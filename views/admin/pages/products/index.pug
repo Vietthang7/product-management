@@ -63,6 +63,7 @@ block main
               if(role.permissions.includes("products_edit"))
                 th Vị trí
                 th Trạng thái
+              th Tạo bởi
               th Hành động
           tbody
             each item, index in products
@@ -106,6 +107,9 @@ block main
                         class="badge badge-danger"
                         button-change-status
                         ) Dừng hoạt động
+                td 
+                  div #{item.createdByFullName}
+                  div #{item.createdAtFormat}
                 td
                   a(
                     class="btn btn-info btn-sm"
