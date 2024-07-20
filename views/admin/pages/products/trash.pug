@@ -121,14 +121,9 @@ block main
                     class="btn btn-info btn-sm"
                     href = `/${prefixAdmin}/products/detail/${item.id}`
                     ) Chi tiết
-                  if(role.permissions.includes("products_edit"))
-                    a(
-                      class="btn btn-warning btn-sm"
-                      href = `/${prefixAdmin}/products/edit/${item.id}`
-                      ) Sửa
                   if(role.permissions.includes("products_delete"))
                     button(
                       class="btn btn-danger btn-sm ml-1"
-                      button-delete=`/${prefixAdmin}/products/delete/${item.id}`
+                      button-delete-permanently=item.id
                     ) Xóa
     +pagination(pagination)

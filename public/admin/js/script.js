@@ -332,12 +332,24 @@ if (tablePermissions) {
 }
 //Hết Phân quyền 
 
-// //Trash
-// const boxTrash = document.querySelector("[box-trash]");
-// if (boxTrash) {
-//     const button = document.querySelector("button");
-//     button.addEventListener("click",()=>{
-//        const link = boxTrash.getAttribute("box-trash");
+// Xóa bản ghi
+const listButtonDeletePermanently = document.querySelectorAll("[button-delete-permanently]");
+if(listButtonDeletePermanently.length > 0) {
+    listButtonDeletePermanently.forEach(button => {
+    button.addEventListener("click", () => {
+      const id = button.getAttribute("button-delete-permanently");
+      console.log(id);
 
-//     })
-// }
+      fetch(`/admin/products/deletePermanently/${id}`, {
+        method: "DELETE"
+      })
+        .then(res => res.json())
+        .then(data => {
+          if(data.code == 200) {
+            window.location.reload();
+          }
+        })
+    });
+  });
+}
+// Hết Xóa bản ghi

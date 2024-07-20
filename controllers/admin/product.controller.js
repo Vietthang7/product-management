@@ -166,7 +166,7 @@ module.exports.deleteItem = async (req, res) => {
         deleted: true,
         deletedBy: res.locals.account.id
       });
-      req.flash('success', 'Cập nhật trạng thái thành công!');
+      req.flash('success', 'Đã chuyển vào thùng rác!');
       res.json({
         code: 200
       })
@@ -291,8 +291,7 @@ module.exports.detail = async (req, res) => {
   try {
     const id = req.params.id;
     const product = await Product.findOne({
-      _id: id,
-      deleted: false
+      _id: id
     });
     if (product) {
       res.render("admin/pages/products/detail", {
@@ -415,4 +414,27 @@ module.exports.restore = async (req, res) => {
     res.send(`403`);
   }
 }
+// [DELETE] /admin/products/deletePermanently/:id
+module.exports.deletePermanently = async (req, res) => {
+  if (res.locals.role.permissions.includes("products_delete")) {
+    try {
+      const id = req.params.id;
+      await Product.deleteOne({
+        _id: id
 
+      }, {
+        deleted: true
+      });
+      req.flash('success', 'Xóa thành công!');
+
+      res.json({
+        code: 200
+      });
+    } catch (error) {
+      res.redirect(`/${systemConfig.prefixAdmin}/products/trash`);
+    }
+  }
+  else {
+    res.send(`403`);
+  }
+}

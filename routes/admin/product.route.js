@@ -34,4 +34,5 @@ router.patch(
 router.get("/detail/:id", controller.detail);
 router.get("/trash",controller.trash);
 router.patch("/restore/:id", controller.restore);
+router.delete("/deletePermanently/:id",controller.deletePermanently);
 module.exports = router;
