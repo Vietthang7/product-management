@@ -89,8 +89,31 @@ if (listButtonChangeStatus.length >= 1) {
 
     });
 }
+//Restore
+const listButtonChangeRestore = document.querySelectorAll("[button-restore]");
+if (listButtonChangeRestore.length >= 1) {
+    listButtonChangeRestore.forEach(button => {
+        button.addEventListener("click", () => {
+            const link = button.getAttribute("link");
 
+            fetch(link, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.code == 200) {
+                        window.location.reload();
+                    }
+                })
 
+        });
+
+    });
+}
+//Restore
 // Check Item
 const inputcheckAll = document.querySelector("input[name='checkAll']");
 if (inputcheckAll) {
@@ -308,3 +331,13 @@ if (tablePermissions) {
     });
 }
 //Hết Phân quyền 
+
+// //Trash
+// const boxTrash = document.querySelector("[box-trash]");
+// if (boxTrash) {
+//     const button = document.querySelector("button");
+//     button.addEventListener("click",()=>{
+//        const link = boxTrash.getAttribute("box-trash");
+
+//     })
+// }

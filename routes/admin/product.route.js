@@ -32,4 +32,6 @@ router.patch(
     controller.editPatch
 );
 router.get("/detail/:id", controller.detail);
+router.get("/trash",controller.trash);
+router.patch("/restore/:id", controller.restore);
 module.exports = router;

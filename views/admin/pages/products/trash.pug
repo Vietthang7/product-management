@@ -3,10 +3,9 @@ include ../../mixins/filter-status.pug
 include ../../mixins/search.pug
 include ../../mixins/pagination.pug
 include ../../mixins/box-actions.pug
-include ../../mixins/trash.pug
 block main
   if(role.permissions.includes("products_view"))
-    h1(class="mb-4") Quản lý sản phẩm
+    h1(class="mb-4") Thùng rác
     .card.mb-3
       .card-header Bộ lọc và Tìm kiếm
       .card-body
@@ -46,12 +45,6 @@ block main
     .card.mb-3
       .card-header Danh sách
       .card-body
-        div(class="text-right mb-2")
-          if(role.permissions.includes("products_create"))
-            a(
-              href=`/${prefixAdmin}/products/create`
-              class="btn btn-outline-success"
-            ) + Thêm mới
         table.table.table-hover.table-sm
           thead
             tr
@@ -64,6 +57,7 @@ block main
               if(role.permissions.includes("products_edit"))
                 th Vị trí
                 th Trạng thái
+                th Khôi phục
               th Tạo bởi
               th Cập nhật
               th Hành động
@@ -109,11 +103,17 @@ block main
                         class="badge badge-danger"
                         button-change-status
                         ) Dừng hoạt động
+                  td
+                    button(
+                      link=`/${prefixAdmin}/products/restore/${item.id}`
+                      button-restore
+                      class="badge badge-secondary"
+                    ) Khôi phục
                 td 
                   div #{item.createdByFullName}
                   div #{item.createdAtFormat}
                 td
-                  div #{item.updatedByFullName}
+                  div #{item.deletedByFullName}
                   if(item.createdAtFormat!=item.updatedAtFormat)
                     div #{item.updatedAtFormat}
                 td
@@ -131,6 +131,4 @@ block main
                       class="btn btn-danger btn-sm ml-1"
                       button-delete=`/${prefixAdmin}/products/delete/${item.id}`
                     ) Xóa
-    
     +pagination(pagination)
-    +trash(`/${prefixAdmin}/products/trash`)

@@ -57,17 +57,18 @@ module.exports.index = async (req, res) => {
 
 
   // console.log(products);
-  for(const item of products){
-    if(item.createdBy){
+  for (const item of products) {
+    if (item.createdBy) {
       const accountCreated = await Account.findOne({
-        _id : item.createdBy
+        _id: item.createdBy
       });
       item.createdByFullName = accountCreated.fullName;
     } else {
       item.createdByFullName = "";
     }
     item.createdAtFormat = moment(item.createdAt).format("DD/MM/YY HH:mm:ss");
-    if(item.updatedBy) {
+    // Người cập nhật
+    if (item.updatedBy) {
       const accountUpdated = await Account.findOne({
         _id: item.updatedBy
       });
@@ -96,12 +97,12 @@ module.exports.changeStatus = async (req, res) => {
       } = req.params;
       await Product.updateOne({
         _id: id
-  
+
       }, {
         status: statusChange
       });
       req.flash('success', 'Cập nhật trạng thái thành công!');
-  
+
       res.json({
         code: 200
       });
@@ -162,7 +163,8 @@ module.exports.deleteItem = async (req, res) => {
         _id: id
       }, {
 
-        deleted: true
+        deleted: true,
+        deletedBy: res.locals.account.id
       });
       req.flash('success', 'Cập nhật trạng thái thành công!');
       res.json({
@@ -268,7 +270,7 @@ module.exports.editPatch = async (req, res) => {
         const countProducts = await Product.countDocuments({});
         req.body.position = countProducts + 1;
       }
-      req.body.updatedBy = res.locals.account.id;
+      // req.body.updatedBy = res.locals.account.id;
       await Product.updateOne({
         _id: id,
         deleted: false
@@ -304,3 +306,113 @@ module.exports.detail = async (req, res) => {
     res.redirect(`${systemConfig.prefixAdmin}/products`);
   }
 }
+// [GET] /admin/products/trash
+module.exports.trash = async (req, res) => {
+  const find = {
+    deleted: true
+  }
+  const filterStatus = [{
+    label: "Tất cả",
+    value: ""
+  }, {
+    label: "Đang hoạt động",
+    value: "active"
+  }, {
+    label: "Dừng hoạt động",
+    value: "inactive"
+  },
+  ];
+  if (req.query.status) {
+    find.status = req.query.status;
+  }
+  // Tìm kiếm 
+  let keyword = "";
+  if (req.query.keyword) {
+    const regex = new RegExp(req.query.keyword, "i");
+    find.title = regex;
+    keyword = req.query.keyword;
+  }
+  // Hết tìm kiếm
+
+  // Phân trang
+  const pagination = await paginationHelper(req, find);
+  // Hết phân trang
+  //Sắp xếp
+  const sort = {};
+  if (req.query.sortKey && req.query.sortValue) {
+    sort[req.query.sortKey] = req.query.sortValue;
+  } else {
+    sort.position = "desc";
+  }
+  // Hết sắp xếp
+  const products = await Product
+    .find(find)
+    .limit(pagination.limitItems) // số lượng tối thiểu 
+    .skip(pagination.skip) // bỏ qua
+    .sort(sort);
+  // res.send("ok");
+  // console.log(products);
+  for (const item of products) {
+    if (item.createdBy) {
+      const accountCreated = await Account.findOne({
+        _id: item.createdBy
+      });
+      item.createdByFullName = accountCreated.fullName;
+    } else {
+      item.createdByFullName = "";
+    }
+    item.createdAtFormat = moment(item.createdAt).format("DD/MM/YY HH:mm:ss");
+    if (item.updatedBy) {
+      const accountUpdated = await Account.findOne({
+        _id: item.updatedBy
+      });
+      item.updatedByFullName = accountUpdated.fullName;
+    } else {
+      item.updatedByFullName = "";
+    }
+
+    item.updatedAtFormat = moment(item.updatedAt).format("DD/MM/YY HH:mm:ss");
+    if (item.deletedBy) {
+      const accountDeleted = await Account.findOne({
+        _id: item.deletedBy
+      });
+      item.deletedByFullName = accountDeleted.fullName;
+    } else {
+      item.deletedByFullName = "";
+    }
+
+    item.updatedAtFormat = moment(item.updatedAt).format("DD/MM/YY HH:mm:ss");
+  }
+  res.render("admin/pages/products/trash", {
+    pageTitle: "Trang thùng rác",
+    products: products,
+    keyword: keyword,
+    filterStatus: filterStatus,
+    pagination: pagination
+  });
+}
+// [PATCH] /admin/products/restore/:id
+module.exports.restore = async (req, res) => {
+  if (res.locals.role.permissions.includes("products_edit")) {
+    try {
+      const id = req.params.id;
+      await Product.updateOne({
+        _id: id
+
+      }, {
+        deleted: false
+      });
+      req.flash('success', 'Khôi phục thành công!');
+
+      res.json({
+        code: 200
+      });
+    } catch (error) {
+      res.redirect(`/${systemConfig.prefixAdmin}/products/trash`);
+    }
+  }
+  else {
+    res.send(`403`);
+  }
+}
+
