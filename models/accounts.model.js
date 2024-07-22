@@ -8,6 +8,9 @@ const accountShema = new mongoose.Schema({
     avatar : String,
     role_id : String,
     status : String,
+    createdBy:String,
+    updatedBy:String,
+    deletedBy:String,
     deleted: {
         type: Boolean,
         default: false

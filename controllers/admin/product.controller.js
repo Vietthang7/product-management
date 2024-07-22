@@ -133,14 +133,15 @@ module.exports.changeMulti = async (req, res) => {
           }, {
             status: status
           });
+          req.flash('success', 'Cập nhật trạng thái thành công!');
           break;
         case "delete":
           await Product.updateMany({
             _id: ids
           }, {
             deleted: true
-
           });
+          req.flash('success', 'Đã chuyển vào thùng rác!');
         default:
           break;
       }
@@ -222,7 +223,7 @@ module.exports.createPost = async (req, res) => {
       const countProducts = await Product.countDocuments({});
       req.body.position = countProducts + 1;
     }
-    req.body.createdBy = res.local.account.id;
+    req.body.createdBy = res.locals.account.id;
     const newProduct = new Product(req.body);
     await newProduct.save();
     res.redirect(`/${systemConfig.prefixAdmin}/products`);
@@ -270,7 +271,7 @@ module.exports.editPatch = async (req, res) => {
         const countProducts = await Product.countDocuments({});
         req.body.position = countProducts + 1;
       }
-      // req.body.updatedBy = res.locals.account.id;
+      req.body.updatedBy = res.locals.account.id;
       await Product.updateOne({
         _id: id,
         deleted: false
@@ -291,7 +292,8 @@ module.exports.detail = async (req, res) => {
   try {
     const id = req.params.id;
     const product = await Product.findOne({
-      _id: id
+      _id: id,
+      deleted: false
     });
     if (product) {
       res.render("admin/pages/products/detail", {
@@ -390,7 +392,7 @@ module.exports.trash = async (req, res) => {
     pagination: pagination
   });
 }
-// [PATCH] /admin/products/restore/:id
+// [PATCH] /admin/products/trash/restore/:id
 module.exports.restore = async (req, res) => {
   if (res.locals.role.permissions.includes("products_edit")) {
     try {
@@ -399,7 +401,8 @@ module.exports.restore = async (req, res) => {
         _id: id
 
       }, {
-        deleted: false
+        deleted: false,
+        updatedBy: res.locals.account.id
       });
       req.flash('success', 'Khôi phục thành công!');
 
@@ -414,7 +417,7 @@ module.exports.restore = async (req, res) => {
     res.send(`403`);
   }
 }
-// [DELETE] /admin/products/deletePermanently/:id
+// [DELETE] /admin/products/trash/deletePermanently/:id
 module.exports.deletePermanently = async (req, res) => {
   if (res.locals.role.permissions.includes("products_delete")) {
     try {
@@ -436,5 +439,60 @@ module.exports.deletePermanently = async (req, res) => {
   }
   else {
     res.send(`403`);
+  }
+}
+// [PATCH] /admin/products/trash/change-multi
+module.exports.changeMultiRestore = async (req, res) => {
+  if (res.locals.role.permissions.includes("products_edit")) {
+    try {
+      const {
+        acts,
+        ids
+      } = req.body;
+      switch (acts) {
+        case "restore":
+          await Product.updateMany({
+            _id: ids
+          }, {
+            deleted: false
+          });
+          break;
+        case "delete-permanently":
+          await Product.deleteMany({
+            _id: ids
+          });
+          break;
+        default:
+          break;
+      }
+      res.json({
+        code: 200
+      });
+    } catch (error) {
+      res.redirect(`/${systemConfig.prefixAdmin}/products/trash`);
+    }
+  } else {
+    res.send(`403`);
+  }
+}
+// [GET] /admin/products/trash/detail/:id
+
+module.exports.detailTrash = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const product = await Product.findOne({
+      _id: id,
+      deleted: true
+    });
+    if (product) {
+      res.render("admin/pages/products/detail", {
+        pageTitle: "Chi tiết sản phẩm",
+        product: product
+      });
+    } else {
+      res.redirect(`${systemConfig.prefixAdmin}/products/trash`);
+    }
+  } catch (error) {
+    res.redirect(`${systemConfig.prefixAdmin}/products/trash`);
   }
 }

@@ -3,6 +3,7 @@ include ../../mixins/filter-status.pug
 include ../../mixins/search.pug
 include ../../mixins/pagination.pug
 include ../../mixins/box-actions.pug
+include ../../mixins/trash.pug
 
 block main
   if(role.permissions.includes("accounts_view"))
@@ -45,6 +46,8 @@ block main
               th Email
               if(role.permissions.includes("accounts_edit"))
                 th Trạng thái
+              th Tạo bởi
+              th Cập nhật
               th Hành động
 
           tbody
@@ -69,7 +72,7 @@ block main
                 td #{item.email}
                 if(role.permissions.includes("accounts_edit"))
                   td
-                    if (item.status === "active")
+                    if (item.status == "active")
                       button(
                         link=`/${prefixAdmin}/accounts/change-status/inactive/${item.id}` 
                         class="badge badge-success"
@@ -81,6 +84,13 @@ block main
                         class="badge badge-danger"
                         button-change-status
                       ) Dừng hoạt động
+                td 
+                  div #{item.createdByFullName}
+                  div #{item.createdAtFormat}
+                td
+                  div #{item.updatedByFullName}
+                  if(item.createdAtFormat!=item.updatedAtFormat)
+                    div #{item.updatedAtFormat}
                 td
                   a(
                     class="btn btn-secondary btn-sm"
@@ -96,3 +106,4 @@ block main
                       button-delete=`/${prefixAdmin}/accounts/delete/${item.id}`
                     ) Xóa
     +pagination(pagination)
+    +trash(`/${prefixAdmin}/accounts/trash`)

@@ -33,6 +33,8 @@ router.patch(
 );
 router.get("/detail/:id", controller.detail);
 router.get("/trash",controller.trash);
-router.patch("/restore/:id", controller.restore);
-router.delete("/deletePermanently/:id",controller.deletePermanently);
+router.patch("/trash/restore/:id", controller.restore);
+router.patch("/trash/change-multi", controller.changeMultiRestore);
+router.get("/trash/detail/:id", controller.detailTrash);
+router.delete("/trash/deletePermanently/:id",controller.deletePermanently);
 module.exports = router;

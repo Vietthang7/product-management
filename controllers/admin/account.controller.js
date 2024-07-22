@@ -4,7 +4,7 @@ const systemConfig = require("../../config/system");
 const Account = require("../../models/accounts.model");
 const generateHelper = require("../../helpers/generate.helper");
 const paginationHelper = require("../../helpers/pagination.helper");
-
+const moment = require("moment");
 // [GET] /admin/accounts
 module.exports.index = async (req, res) => {
   const find = {
@@ -43,8 +43,27 @@ module.exports.index = async (req, res) => {
     .find(find)
     .limit(pagination.limitItems) // số lượng tối thiểu 
     .skip(pagination.skip) // bỏ qua
+  for (const item of records) {
+    if (item.createdBy) {
+      const accountCreated = await Account.findOne({
+        _id: item.createdBy
+      });
+      item.createdByFullName = accountCreated.fullName;
+    } else {
+      item.createdByFullName = "";
+    }
+    item.createdAtFormat = moment(item.createdAt).format("DD/MM/YY HH:mm:ss");
+    if (item.updatedBy) {
+      const accountUpdated = await Account.findOne({
+        _id: item.updatedBy
+      });
+      item.updatedByFullName = accountUpdated.fullName;
+    } else {
+      item.updatedByFullName = "";
+    }
 
-  for (const record of records) {
+    item.updatedAtFormat = moment(item.updatedAt).format("DD/MM/YY HH:mm:ss");
+  } for (const record of records) {
     const role = await Role.findOne({
       _id: record.role_id,
       deleted: false
@@ -76,6 +95,7 @@ module.exports.createPost = async (req, res) => {
   if (res.locals.role.permissions.includes("accounts_create")) {
     req.body.password = md5(req.body.password);
     req.body.token = generateHelper.generateRandomString(30);
+    req.body.createdBy = res.locals.account.id;
     const account = new Account(req.body);
     await account.save();
     res.redirect(`/${systemConfig.prefixAdmin}/accounts`);
@@ -120,7 +140,7 @@ module.exports.editPatch = async (req, res) => {
       } else {
         req.body.password = md5(req.body.password);
       }
-
+      req.body.updatedBy = res.locals.account.id;
       await Account.updateOne({
         _id: id,
         deleted: false
@@ -147,7 +167,6 @@ module.exports.detail = async (req, res) => {
         _id: account.role_id,
         deleted: false
       });
-      console.log(roles);
       res.render("admin/pages/accounts/detail", {
         pageTitle: "Chi tiết tài khoản",
         roles: roles,
@@ -182,7 +201,7 @@ module.exports.deleteItem = async (req, res) => {
     res.send(`403`);
   }
 }
-// [PATCH] /admin/products/change-status/:statusChange/:id
+// [PATCH] /admin/accounts/change-status/:statusChange/:id
 module.exports.changeStatus = async (req, res) => {
   if (res.locals.role.permissions.includes("accounts_edit")) {
     try {
@@ -220,6 +239,7 @@ module.exports.changeMulti = async (req, res) => {
         status,
         ids
       } = req.body;
+      console.log(req.body);
       switch (status) {
         case "active":
         case "inactive":
@@ -228,14 +248,15 @@ module.exports.changeMulti = async (req, res) => {
           }, {
             status: status
           });
+          req.flash('success', 'Cập nhật trạng thái thành công!');
           break;
         case "delete":
           await Account.updateMany({
             _id: ids
           }, {
             deleted: true
-
           });
+          req.flash('success', 'Đã chuyển vào thùng rác!');
         default:
           break;
       }
@@ -244,6 +265,208 @@ module.exports.changeMulti = async (req, res) => {
       });
     } catch (error) {
       res.redirect(`/${systemConfig.prefixAdmin}/accounts`);
+    }
+  } else {
+    res.send(`403`);
+  }
+}
+// [GET] /admin/accounts/trash
+module.exports.trash = async (req, res) => {
+  const find = {
+    deleted: true
+  }
+  const filterStatus = [{
+    label: "Tất cả",
+    value: ""
+  }, {
+    label: "Đang hoạt động",
+    value: "active"
+  }, {
+    label: "Dừng hoạt động",
+    value: "inactive"
+  },
+  ];
+  if (req.query.status) {
+    find.status = req.query.status;
+  }
+  // Tìm kiếm 
+  let keyword = "";
+  if (req.query.keyword) {
+    const regex = new RegExp(req.query.keyword, "i");
+    find.fullName = regex;
+    keyword = req.query.keyword;
+  }
+  // Hết tìm kiếm
+
+  // Phân trang
+  const pagination = await paginationHelper(req, find);
+  // Hết phân trang
+  //Sắp xếp
+  const sort = {};
+  if (req.query.sortKey && req.query.sortValue) {
+    sort[req.query.sortKey] = req.query.sortValue;
+  } else {
+    sort.position = "desc";
+  }
+  // Hết sắp xếp
+  const accounts = await Account
+    .find(find)
+    .limit(pagination.limitItems) // số lượng tối thiểu 
+    .skip(pagination.skip) // bỏ qua
+    .sort(sort);
+  for (const item of accounts) {
+    if (item.createdBy) {
+      const accountCreated = await Account.findOne({
+        _id: item.createdBy
+      });
+      item.createdByFullName = accountCreated.fullName;
+    } else {
+      item.createdByFullName = "";
+    }
+    item.createdAtFormat = moment(item.createdAt).format("DD/MM/YY HH:mm:ss");
+    if (item.updatedBy) {
+      const accountUpdated = await Account.findOne({
+        _id: item.updatedBy
+      });
+      item.updatedByFullName = accountUpdated.fullName;
+    } else {
+      item.updatedByFullName = "";
+    }
+
+    item.updatedAtFormat = moment(item.updatedAt).format("DD/MM/YY HH:mm:ss");
+    if (item.deletedBy) {
+      const accountDeleted = await Account.findOne({
+        _id: item.deletedBy
+      });
+      item.deletedByFullName = accountDeleted.fullName;
+    } else {
+      item.deletedByFullName = "";
+    }
+
+    item.updatedAtFormat = moment(item.updatedAt).format("DD/MM/YY HH:mm:ss");
+  }
+  for (const account of accounts) {
+    const role = await Role.findOne({
+      _id: account.role_id,
+      deleted: false
+    });
+    account.roleTitle = role.title;
+  }
+
+  res.render("admin/pages/accounts/trash", {
+    pageTitle: "Trang thùng rác",
+    accounts: accounts,
+    keyword: keyword,
+    filterStatus: filterStatus,
+    pagination: pagination
+  });
+}
+// [GET] /admin/accounts/trash/detail/:id
+
+module.exports.detailTrash = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const account = await Account.findOne({
+      _id: id,
+      deleted: true
+    });
+    if (account) {
+      const roles = await Role.findOne({
+        _id: account.role_id,
+        deleted: false
+      });
+      res.render("admin/pages/accounts/detail", {
+        pageTitle: "Chi tiết sản phẩm",
+        roles: roles,
+        account: account
+      });
+    } else {
+      res.redirect(`${systemConfig.prefixAdmin}/accounts/trash`);
+    }
+  } catch (error) {
+    res.redirect(`${systemConfig.prefixAdmin}/accounts/trash`);
+  }
+}
+// [DELETE] /admin/accounts/trash/deletePermanently/:id
+module.exports.deletePermanently = async (req, res) => {
+  if (res.locals.role.permissions.includes("accounts_delete")) {
+    try {
+      const id = req.params.id;
+      await Account.deleteOne({
+        _id: id
+
+      }, {
+        deleted: true
+      });
+      req.flash('success', 'Xóa thành công!');
+
+      res.json({
+        code: 200
+      });
+    } catch (error) {
+      res.redirect(`/${systemConfig.prefixAdmin}/accounts/trash`);
+    }
+  }
+  else {
+    res.send(`403`);
+  }
+}
+// [PATCH] /admin/accounts/trash/restore/:id
+module.exports.restore = async (req, res) => {
+  if (res.locals.role.permissions.includes("accounts_edit")) {
+    try {
+      const id = req.params.id;
+      await Account.updateOne({
+        _id: id
+
+      }, {
+        deleted: false,
+        updatedBy: res.locals.account.id
+      });
+      req.flash('success', 'Khôi phục thành công!');
+
+      res.json({
+        code: 200
+      });
+    } catch (error) {
+      res.redirect(`/${systemConfig.prefixAdmin}/accounts/trash`);
+    }
+  }
+  else {
+    res.send(`403`);
+  }
+}
+// [PATCH] /admin/products/trash/change-multi
+module.exports.changeMulti = async (req, res) => {
+  if (res.locals.role.permissions.includes("accounts_edit")) {
+    try {
+      const {
+        acts,
+        ids
+      } = req.body;
+      switch (acts) {
+        case "restore":
+          await Account.updateMany({
+            _id: ids
+          }, {
+            deleted: false
+          });
+          req.flash('success', 'Khôi phục thành công!');
+          break;
+        case "delete-permanently":
+          await Account.deleteMany({
+            _id: ids
+          });
+          req.flash('success', 'Xóa thành công!');
+          break;
+        default:
+          break;
+      }
+      res.json({
+        code: 200
+      });
+    } catch (error) {
+      res.redirect(`/${systemConfig.prefixAdmin}/accounts/trash`);
     }
   } else {
     res.send(`403`);

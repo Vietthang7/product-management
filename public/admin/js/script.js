@@ -50,7 +50,6 @@ if (formSearch) {
 //End Form Search
 
 //Pagination
-
 const listButtonPagination = document.querySelectorAll("[button-pagination]");
 if (listButtonPagination.length > 0) {
     let url = new URL(window.location.href);
@@ -63,7 +62,6 @@ if (listButtonPagination.length > 0) {
         });
     });
 }
-
 // End Pagination
 
 const listButtonChangeStatus = document.querySelectorAll("[button-change-status]");
@@ -89,6 +87,7 @@ if (listButtonChangeStatus.length >= 1) {
 
     });
 }
+
 //Restore
 const listButtonChangeRestore = document.querySelectorAll("[button-restore]");
 if (listButtonChangeRestore.length >= 1) {
@@ -173,12 +172,14 @@ if (boxActions) {
                         window.location.reload();
                     }
                 })
-        } else { }
+        } else {
+            alert("Hành động và checkItem phải được chọn!");
+        }
     });
 }
 //  End Box Actions
 
-// Xóa bản ghi
+// Xóa bản ghi mềm
 const listButtonDelete = document.querySelectorAll("[button-delete]");
 if (listButtonDelete.length > 0) {
     listButtonDelete.forEach(button => {
@@ -198,8 +199,7 @@ if (listButtonDelete.length > 0) {
         });
     });
 }
-
-//End xóa bản ghi
+//End xóa bản ghi mềm 
 
 //  Thay đổi vị trí
 const listInputPosition = document.querySelectorAll("input[name='position']");
@@ -225,6 +225,7 @@ if (listInputPosition.length > 0) {
     })
 }
 // Hết thay đổi vị trí
+
 // show-alert
 const showAlert = document.querySelector("[show-alert]");
 if (showAlert) {
@@ -235,6 +236,7 @@ if (showAlert) {
     }, time);
 }
 // End show-alert
+
 //Upload Image
 const uploadImage = document.querySelector("[upload-image]");
 if (uploadImage) {
@@ -249,6 +251,8 @@ if (uploadImage) {
     })
 }
 // End Upload Image
+
+
 // Sort 
 const sort = document.querySelector("[sort]");
 if (sort) {
@@ -332,24 +336,61 @@ if (tablePermissions) {
 }
 //Hết Phân quyền 
 
-// Xóa bản ghi
+// Xóa bản ghi vĩnh viễn
 const listButtonDeletePermanently = document.querySelectorAll("[button-delete-permanently]");
 if(listButtonDeletePermanently.length > 0) {
     listButtonDeletePermanently.forEach(button => {
     button.addEventListener("click", () => {
-      const id = button.getAttribute("button-delete-permanently");
-      console.log(id);
-
-      fetch(`/admin/products/deletePermanently/${id}`, {
+      const link = button.getAttribute("link");
+      fetch(link, {
         method: "DELETE"
       })
         .then(res => res.json())
         .then(data => {
-          if(data.code == 200) {
+          if(data.code  == 200) {
             window.location.reload();
           }
         })
     });
   });
 }
-// Hết Xóa bản ghi
+// Hết Xóa bản ghi vĩnh viễn 
+
+
+// Box ActionsTrash
+const boxActionsTrash = document.querySelector("[box-actions-trash]");
+if (boxActionsTrash) {
+    const button = boxActionsTrash.querySelector("button");
+    button.addEventListener("click", () => {
+        const select = boxActionsTrash.querySelector("select");
+        const acts = select.value;
+
+
+        const listInputCheckedRestore = document.querySelectorAll("input[name='checkItem']:checked");
+        const ids = [];
+        listInputCheckedRestore.forEach(input => {
+            ids.push(input.value);
+        });
+        if (acts && ids.length > 0) {
+            const dataChangeMulti = {
+                acts: acts,
+                ids: ids
+            };
+            const link = boxActionsTrash.getAttribute("box-actions-trash");
+            fetch(link, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(dataChangeMulti),
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.code == 200) {
+                        window.location.reload();
+                    }
+                })
+        } else { }
+    });
+}
+//  End Box ActionsTrash

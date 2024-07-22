@@ -1,0 +1,14 @@
+mixin box-actions-trash(link)
+  div(
+    class="input-group" 
+    box-actions-trash=link
+  )
+    select(class="custom-select")
+      option(value='') Chọn hành động...
+      option(value='restore') Khôi phục
+      option(value='delete-permanently') Xóa
+    .input-group-append
+      button(
+        class="btn btn-outline-secondary"
+        type='button'
+      ) Áp dụng

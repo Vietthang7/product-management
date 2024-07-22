@@ -3,7 +3,7 @@ include ../../mixins/search.pug
 include ../../mixins/pagination.pug
 include ../../mixins/box-actions-trash.pug
 block main
-  if(role.permissions.includes("products_view"))
+  if(role.permissions.includes("products-category_view"))
     h1(class="mb-4") Thùng rác
     .card.mb-3
       .card-header Bộ lọc và Tìm kiếm
@@ -11,11 +11,11 @@ block main
         .row
           .col-6
             +search(keyword)
-    if(role.permissions.includes("products_edit"))
+    if(role.permissions.includes("products-category_edit"))
       .card.mb-3
         .card-header Hành động
           .card-body
-            +box-actions-trash(`/${prefixAdmin}/products/trash/change-multi`)
+            +box-actions-trash(`/${prefixAdmin}/products-category/trash/change-multi`)
       .card.mb-3
         .card-header Sắp xếp
         .card-body
@@ -29,8 +29,6 @@ block main
                 )
                   option(value="position-desc") Vị trí giảm dần
                   option(value="position-asc") Vị trí tăng dần
-                  option(value="price-desc") Giá giảm dần
-                  option(value="price-asc") Giá tăng dần
                   option(value="title-asc") Tiêu đề A - Z
                   option(value="title-desc") Tiêu đề Z - A
 
@@ -50,15 +48,14 @@ block main
               th STT
               th Hình ảnh
               th Tiêu đề
-              th Giá
-              if(role.permissions.includes("products_edit"))
+              if(role.permissions.includes("products-category_edit"))
                 th Vị trí
                 th Khôi phục
               th Tạo bởi
               th Cập nhật
               th Hành động
           tbody
-            each item, index in products
+            each item, index in productCategory
               tr
                 td
                   input(
@@ -75,11 +72,10 @@ block main
                     height="auto"
                   )
                 td #{item.title}
-                td #{item.price}$
-                if(role.permissions.includes("products_edit"))
+                if(role.permissions.includes("products-category_edit"))
                   td
                     input(
-                      link=`/${prefixAdmin}/products/change-position/${item.id}`
+                      link=`/${prefixAdmin}/products-category/change-position/${item.id}`
                       type="number"
                       name="position"
                       value=item.position
@@ -88,7 +84,7 @@ block main
                     )
                   td
                     button(
-                      link=`/${prefixAdmin}/products/trash/restore/${item.id}`
+                      link=`/${prefixAdmin}/products-category/trash/restore/${item.id}`
                       button-restore
                       class="badge badge-secondary"
                     ) Khôi phục
@@ -102,12 +98,12 @@ block main
                 td
                   a(
                     class="btn btn-info btn-sm"
-                    href = `/${prefixAdmin}/products/trash/detail/${item.id}`
+                    href = `/${prefixAdmin}/products-category/trash/detail/${item.id}`
                     ) Chi tiết
-                  if(role.permissions.includes("products_delete"))
+                  if(role.permissions.includes("products-category_delete"))
                     button(
                       class="btn btn-danger btn-sm ml-1"
                       button-delete-permanently
-                      link=`/${prefixAdmin}/products/trash/deletePermanently/${item.id}`
-                    ) Xóa
+                      link=`/${prefixAdmin}/products-category/trash/deletePermanently/${item.id}`
+                    ) Xóa 
     +pagination(pagination)
