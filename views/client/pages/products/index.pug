@@ -1,10 +1,10 @@
 extends ../../layouts/default.pug
 include ../../mixins/box-head.pug
+include ../../mixins/list-products.pug
 block main
   .container.my-3
     .row
       .col-12
         +box-head(pageTitle)
-
     .row
       +list-products(products)
