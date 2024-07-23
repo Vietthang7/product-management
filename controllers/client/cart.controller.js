@@ -20,7 +20,7 @@ module.exports.index = async (req, res) => {
   }
   res.render("client/pages/cart/index", {
     pageTitle: "Giỏ hàng",
-    cartDetail : cart
+    cartDetail: cart
   }
   );
 }
@@ -61,5 +61,24 @@ module.exports.addPost = async (req, res) => {
     res.redirect("back");
   } catch (error) {
     res.redirect("/products");
+  }
+}
+//[GET] /cart/delete/:productId
+module.exports.delete = async (req, res) => {
+  try {
+    const cartId = req.cookies.cartId;
+    const productId = req.params.productId;
+    await Cart.updateOne({
+      _id: cartId
+    }, {
+      $pull: {
+        products: {
+          productId: productId
+        }
+      }
+    });
+    res.redirect("back");
+  } catch (error) {
+    res.redirect("/cart");
   }
 }
