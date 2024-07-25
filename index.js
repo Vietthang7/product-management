@@ -18,9 +18,6 @@ const app = express();
 const port = process.env.PORT;
 
 //Flash
-// app.use(cookieParser('HHKALKS'));
-// app.use(session({cookie:{maxAge:60000}}));
-// app.use(flash());
 app.use(cookieParser('HHKALKS'));
 app.use(session({ cookie: { maxAge: 60000 }}));
 app.use(flash());
