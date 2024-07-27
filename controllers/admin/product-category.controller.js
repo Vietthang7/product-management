@@ -259,6 +259,7 @@ module.exports.changeMulti = async (req, res) => {
         status,
         ids
       } = req.body;
+      console.log(req.body);
       switch (status) {
         case "active":
         case "inactive":
@@ -282,7 +283,7 @@ module.exports.changeMulti = async (req, res) => {
         code: 200
       });
     } catch (error) {
-      res.redirect(`${systemConfig.prefixAdmin}/products-category`);
+      res.redirect(`/${systemConfig.prefixAdmin}/products-category`);
     }
   } else {
     res.send(`403`);

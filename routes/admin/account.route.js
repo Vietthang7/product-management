@@ -31,5 +31,5 @@ router.get("/trash",controller.trash);
 router.get("/trash/detail/:id",controller.detailTrash);
 router.delete("/trash/deletePermanently/:id",controller.deletePermanently);
 router.patch("/trash/restore/:id", controller.restore);
-router.patch("/trash/change-multi", controller.changeMulti);
+router.patch("/trash/change-multi", controller.changeMultiRestore);
 module.exports = router;

@@ -4,7 +4,6 @@ include ../../mixins/search.pug
 include ../../mixins/pagination.pug
 include ../../mixins/box-actions.pug
 include ../../mixins/trash.pug
-
 block main
   if(role.permissions.includes("accounts_view"))
     h1(class="mb-4") Danh sách tài khoản admin
@@ -32,9 +31,7 @@ block main
                 href=`/${prefixAdmin}/accounts/create`
                 class="btn btn-outline-success"
               ) + Thêm mới
-        table(
-          class="table table-hover table-sm"
-        )
+        table.table.table-hover.table-sm
           thead
             tr
               th
@@ -55,10 +52,10 @@ block main
               tr
                 td
                   input(
-                    name="checkItem" 
-                    type = "checkbox"
-                    value = item.id 
-                  )  
+                    name="checkItem"
+                    type ="checkbox"
+                    value = item.id
+                  )
                 td #{index+1}
                 td
                   img(

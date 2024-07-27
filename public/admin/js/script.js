@@ -157,8 +157,8 @@ if (boxActions) {
                 status: status,
                 ids: ids
             };
+            console.log(dataChangeMulti);
             const link = boxActions.getAttribute("box-actions");
-
             fetch(link, {
                 method: "PATCH",
                 headers: {

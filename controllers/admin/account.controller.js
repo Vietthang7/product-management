@@ -239,7 +239,6 @@ module.exports.changeMulti = async (req, res) => {
         status,
         ids
       } = req.body;
-      console.log(req.body);
       switch (status) {
         case "active":
         case "inactive":
@@ -248,15 +247,14 @@ module.exports.changeMulti = async (req, res) => {
           }, {
             status: status
           });
-          req.flash('success', 'Cập nhật trạng thái thành công!');
           break;
         case "delete":
           await Account.updateMany({
             _id: ids
           }, {
             deleted: true
+
           });
-          req.flash('success', 'Đã chuyển vào thùng rác!');
         default:
           break;
       }
@@ -437,7 +435,7 @@ module.exports.restore = async (req, res) => {
   }
 }
 // [PATCH] /admin/products/trash/change-multi
-module.exports.changeMulti = async (req, res) => {
+module.exports.changeMultiRestore = async (req, res) => {
   if (res.locals.role.permissions.includes("accounts_edit")) {
     try {
       const {

@@ -125,6 +125,7 @@ module.exports.changeMulti = async (req, res) => {
         status,
         ids
       } = req.body;
+      console.log(req.body);
       switch (status) {
         case "active":
         case "inactive":

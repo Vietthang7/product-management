@@ -15,7 +15,6 @@ module.exports.index = (app) => {
     app.use(`${path}/dashboard`,
         authMiddleware.requireAuth,
         dashboardRoute);
-
     app.use(`${path}/products`,
         authMiddleware.requireAuth,
         productRoute);
