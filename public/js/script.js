@@ -38,4 +38,3 @@ if (inputcheckAll) {
   });
 }
 // End Check Item
-

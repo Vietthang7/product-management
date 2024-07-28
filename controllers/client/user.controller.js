@@ -19,6 +19,11 @@ module.exports.registerPost = async (req, res) => {
     res.redirect("back");
     return;
   }
+  if(req.body.password != req.body.confirmpassword){
+    req.flash("error", "Mật khẩu không khớp");
+    res.redirect("back");
+    return;
+  }
   const userData = {
     fullName: req.body.fullName,
     email: req.body.email,
@@ -150,6 +155,11 @@ module.exports.resetPassword = async (req, res) => {
 
 // [PATCH] /user/password/reset
 module.exports.resetPasswordPatch = async (req, res) => {
+  if(req.body.password != req.body.confirmpassword){
+    req.flash("error", "Mật khẩu không khớp");
+    res.redirect("back");
+    return;
+  }
   const password = req.body.password;
   const tokenUser = req.cookies.tokenUser;
   await User.updateOne({
