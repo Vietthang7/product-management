@@ -63,7 +63,8 @@ if (listButtonPagination.length > 0) {
     });
 }
 // End Pagination
-
+ 
+//Change Status
 const listButtonChangeStatus = document.querySelectorAll("[button-change-status]");
 if (listButtonChangeStatus.length >= 1) {
     listButtonChangeStatus.forEach(button => {
@@ -87,6 +88,7 @@ if (listButtonChangeStatus.length >= 1) {
 
     });
 }
+// End Change Status
 
 //Restore
 const listButtonChangeRestore = document.querySelectorAll("[button-restore]");

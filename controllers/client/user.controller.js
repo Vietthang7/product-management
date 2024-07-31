@@ -69,7 +69,13 @@ module.exports.loginPost = async (req, res) => {
     return;
   }
 
-  res.cookie("tokenUser", user.tokenUser);
+  const expires = 3 * 24 * 60 * 60 * 1000;
+    res.cookie(
+      "tokenUser",
+      user.tokenUser,
+      {
+        expires: new Date(Date.now() + expires)
+      });
   req.flash("success", "Đăng nhập thành công!");
   res.redirect("/");
 
@@ -174,3 +180,31 @@ module.exports.resetPasswordPatch = async (req, res) => {
   });
   res.redirect("/");
 };
+//[GET] /user/profile
+module.exports.profile = async (req, res) => {
+  res.render("client/pages/user/profile", {
+    pageTitle: "Thông tin cá nhân"
+  });
+};
+//[GET] /user/password-old
+module.exports.oldPassword = async (req, res) => {
+  res.render("client/pages/user/oldPassword", {
+    pageTitle: "Nhập mật khẩu cũ"
+  });
+};
+//[POST] /user/password-old
+module.exports.oldPasswordPost = async (req, res) => {
+  const password = req.body.password;
+  const tokenUser = req.cookies.tokenUser;
+  const existUser =  await User.findOne({
+    tokenUser : tokenUser,
+    deleted: false
+  });
+  if (md5(req.body.password) != existUser.password) {
+    req.flash("error", "Sai mật khẩu");
+    res.redirect("back");
+    return;
+  }
+  res.redirect(`/user/password/reset`)
+};
+

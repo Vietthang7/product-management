@@ -38,3 +38,23 @@ if (inputcheckAll) {
   });
 }
 // End Check Item
+// Đổi mật khẩu
+const buttonResetPassword = document.querySelector("[reset-password]");
+buttonResetPassword.addEventListener("click", () => {
+  const link = buttonResetPassword.getAttribute("link");
+  console.log(link);
+  fetch(link, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    }
+  })
+    .then(res => res.json())
+    .then(data => {
+      if (data.code == 200) {
+        window.location.reload();
+      }
+    })
+
+});
+// End Đổi mật khẩu
