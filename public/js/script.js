@@ -38,23 +38,48 @@ if (inputcheckAll) {
   });
 }
 // End Check Item
-// Đổi mật khẩu
-const buttonResetPassword = document.querySelector("[reset-password]");
-buttonResetPassword.addEventListener("click", () => {
-  const link = buttonResetPassword.getAttribute("link");
-  console.log(link);
-  fetch(link, {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-    }
-  })
-    .then(res => res.json())
-    .then(data => {
-      if (data.code == 200) {
-        window.location.reload();
-      }
-    })
 
-});
-// End Đổi mật khẩu
+// Lấy các phần tử liên quan đến việc hiện/ẩn mật khẩu  
+const togglePasswordVisibility = document.querySelector("[togglePassword]"); // Nut hoặc biểu tượng để hiện/ẩn mật khẩu 
+const togglePasswordVisibilityConfirm = document.querySelector("[togglePasswordConfirm]"); // Nut hoặc biểu tượng để hiện/ẩn mật khẩu 
+const passwordInput = document.querySelector("input[name='password']"); // Input cho mật khẩu 
+const confirmPasswordInput = document.querySelector("input[name='confirmpassword']");   
+
+if (togglePasswordVisibility && passwordInput ) {
+  togglePasswordVisibility.addEventListener("click", () => {
+    let newType = "";
+    const type = passwordInput.getAttribute("type");
+    if (type === "password") {
+      newType = "text";
+    } else {
+      newType = "password";
+    }
+    passwordInput.setAttribute("type", newType);
+
+    // Thay đổi biểu tượng nếu cần (giả sử bạn có hai biểu tượng khác nhau cho hiện và ẩn)  
+    if(newType === "password"){
+      togglePasswordVisibility.innerHTML = `<i class="fa-solid fa-eye-slash"></i>`
+    } else {
+      togglePasswordVisibility.innerHTML = `<i class="fa-solid fa-eye"></i>`
+    }
+  });
+}
+if (togglePasswordVisibilityConfirm && confirmPasswordInput) {
+  togglePasswordVisibilityConfirm.addEventListener("click", () => {
+    let newType = "";
+    const type = confirmPasswordInput.getAttribute("type");
+    if (type === "password") {
+      newType = "text";
+    } else {
+      newType = "password";
+    }
+    confirmPasswordInput.setAttribute("type", newType);
+
+    if(newType === "password"){
+      togglePasswordVisibilityConfirm.innerHTML = `<i class="fa-solid fa-eye-slash"></i>`
+    } else {
+      togglePasswordVisibilityConfirm.innerHTML = `<i class="fa-solid fa-eye"></i>`
+    }
+  });
+}
+//  End Lấy các phần tử liên quan đến việc hiện/ẩn mật khẩu
