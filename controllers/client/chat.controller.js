@@ -17,7 +17,6 @@ module.exports.index = async (req, res) => {
   });
   //End SocketIO
   const chats = await Chat.find({});
-  console.log(chats);
   for(const chat of chats){
     const infoUser = await User.findOne({
       _id : chat.userId
