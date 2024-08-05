@@ -7,6 +7,8 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const methodOverride = require('method-override');
 const path = require('path');
+const http = require('http');
+const { Server } = require("socket.io");
 const database = require("./config/database");
 database.connect();
 
@@ -16,7 +18,12 @@ const routeClient = require("./routes/client/index.route");
 const systemConfig = require("./config/system");
 const app = express();
 const port = process.env.PORT;
-
+//SocketIO
+const server = http.createServer(app);
+const io = new Server(server);
+io.on('connection', (socket) => {
+  console.log('a user connected', socket.id);
+});
 //Flash
 app.use(cookieParser('HHKALKS'));
 app.use(session({ cookie: { maxAge: 60000 }}));
@@ -44,6 +51,6 @@ app.get("*", (req, res) => {
       pageTitle: "404 Not Found"
     });
   });
-app.listen(port, () => {
+server.listen(port, () => {
     console.log(`App listening on port ${port}`);
 });
