@@ -21,9 +21,7 @@ const port = process.env.PORT;
 //SocketIO
 const server = http.createServer(app);
 const io = new Server(server);
-io.on('connection', (socket) => {
-  console.log('a user connected', socket.id);
-});
+global._io = io;
 //Flash
 app.use(cookieParser('HHKALKS'));
 app.use(session({ cookie: { maxAge: 60000 }}));
