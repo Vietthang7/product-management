@@ -37,7 +37,7 @@ module.exports.index = async (req, res) => {
   // Hết tìm kiếm
 
   // Phân trang
-  const pagination = await paginationHelper(req, find);
+  const pagination = await paginationHelper.paginationProduct(req, find);
 
   // Hết phân trang
   //Sắp xếp
@@ -337,7 +337,7 @@ module.exports.trash = async (req, res) => {
   // Hết tìm kiếm
 
   // Phân trang
-  const pagination = await paginationHelper(req, find);
+  const pagination = await paginationHelper.paginationProduct(req, find);
   // Hết phân trang
   //Sắp xếp
   const sort = {};

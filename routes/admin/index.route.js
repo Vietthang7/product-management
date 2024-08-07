@@ -8,6 +8,7 @@ const authRoute = require("./auth.route");
 const authMiddleware = require("../../middlewares/admin/auth.middleware");
 const profileRoute = require("./profile.route");
 const settingRoute = require("./setting.route");
+const postRoute = require("./post.route");
 
 
 module.exports.index = (app) => {
@@ -34,6 +35,9 @@ module.exports.index = (app) => {
     app.use(`${path}/settings`,
         authMiddleware.requireAuth, 
         settingRoute);
+    app.use(`${path}/posts`,
+        authMiddleware.requireAuth, 
+        postRoute);
     app.use(`${path}/auth`, authRoute);
 }
 
