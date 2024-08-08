@@ -27,6 +27,9 @@ block main
         span(class="badge badge-success") Hoạt động
       else
         span(class="badge badge-danger") Dừng hoạt động
+  if(product.deleted)
+    div(class="mb-4")
+      span(class="badge badge-danger") Đã xóa
 
   if (product.position)
     div(class="mb-4") Vị trí: <b>#{product.position}</b>
