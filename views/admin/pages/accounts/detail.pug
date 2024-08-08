@@ -21,6 +21,9 @@ block main
         span(class="badge badge-success") Hoạt động
       else
         span(class="badge badge-danger") Dừng hoạt động
+  if(account.deleted)
+    div(class="mb-4")
+      span(class="badge badge-danger") Đã xóa
   if (roles.title)
     div(class="mb-4") Quyền: #{roles.title}
   if (roles.description)
