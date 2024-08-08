@@ -1,11 +1,10 @@
-const ProductCategory = require("../../models/product-category.model")
+const ArticleCategory = require("../../models/article-category.model");
 const systemConfig = require("../../config/system");
 const createTreeHelper = require("../../helpers/createTree.helper");
 const paginationHelper = require("../../helpers/pagination.helper");
 const moment = require("moment");
 const Account = require("../../models/accounts.model");
-
-// [GET] /admin/products-category
+// [GET] /admin/article-category
 module.exports.index = async (req, res) => {
   const find = {
     deleted: false
@@ -36,7 +35,7 @@ module.exports.index = async (req, res) => {
   //Hết tìm kiếm
 
   //Phân trang
-  const pagination = await paginationHelper.paginationProductCategory(req, find);
+  const pagination = await paginationHelper.paginationArticleCategory(req, find);
   //Hết Phân trang
   //Sắp xếp
   const sort = {};
@@ -45,7 +44,7 @@ module.exports.index = async (req, res) => {
   } else {
     sort.position = "desc";
   }
-  const records = await ProductCategory
+  const records = await ArticleCategory
     .find(find)
     .limit(pagination.limitItems)
     .skip(pagination.skip)
@@ -72,8 +71,8 @@ module.exports.index = async (req, res) => {
 
     item.updatedAtFormat = moment(item.updatedAt).format("DD/MM/YY HH:mm:ss");
   }
-  res.render("admin/pages/products-category/index", {
-    pageTitle: "Danh mục sản phẩm",
+  res.render("admin/pages/article-category/index", {
+    pageTitle: "Danh mục bài viết",
     records: records,
     keyword: keyword,
     filterStatus: filterStatus,
@@ -81,15 +80,113 @@ module.exports.index = async (req, res) => {
   }
   );
 }
+// [GET] /admin/article-category/create
+module.exports.create = async (req, res) => {
+  const categories = await ArticleCategory.find({
+    deleted: false
+  });
+  const newCategories = createTreeHelper(categories);
+  res.render("admin/pages/article-category/create", {
+    pageTitle: "Thêm mới danh mục bài viết",
+    categories: newCategories
+  }
+  );
+}
+// [POST] /admin/article-category/create
+module.exports.createPost = async (req, res) => {
+  if (res.locals.role.permissions.includes("article-category_create")) {
+    if (req.body.position) {
+      req.body.position = parseInt(req.body.position);
+    } else {
+      const countCategory = await ArticleCategory.countDocuments({});
+      req.body.position = countCategory + 1;
+    }
+    req.body.createdBy = res.locals.account.id;
+    const newCategory = new ArticleCategory(req.body);
+    await newCategory.save();
+    res.redirect(`/${systemConfig.prefixAdmin}/article-category`);
+  } else {
+    res.send(`403`);
+  }
+}
+// [GET] /admin/article-category/edit/:id
+module.exports.edit = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const categories = await ArticleCategory.find({
+      deleted: false
+    });
+    const category = await ArticleCategory.findOne({
+      _id: id,
+      deleted: false
+    });
 
-// [PATCH] /admin/products-category/change-status/:statusChange/:id
+    const newCategories = createTreeHelper(categories);
+    res.render("admin/pages/article-category/edit", {
+      pageTitle: "Chỉnh sửa danh mục",
+      categories: newCategories,
+      category: category
+    }
+    );
+
+  } catch (error) {
+    res.redirect(`${systemConfig.prefixAdmin}/article-category`);
+  }
+}
+// [PATCH] /admin/article-category/edit/:id
+module.exports.editPatch = async (req, res) => {
+  if (res.locals.role.permissions.includes("article-category_edit")) {
+    try {
+      const id = req.params.id;
+      if (req.body.position) {
+        req.body.position = parseInt(req.body.position);
+      } else {
+        const countCategory = await ArticleCategory.countDocuments({});
+        req.body.position = countCategory + 1;
+      }
+      req.body.updatedBy = res.locals.account.id;
+      await ArticleCategory.updateOne({
+        _id: id,
+        deleted: false
+      }, req.body);
+      req.flash("success", "Cập nhật danh mục thành công!");
+
+    } catch (error) {
+      req.flash("error", "Id sản phẩm không hợp lệ !");
+    }
+    res.redirect("back");
+  } else {
+    res.send(`403`);
+  }
+}
+// [GET] /admin/article-category/detail/:id
+module.exports.detail = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const articleCategory = await ArticleCategory.findOne({
+      _id: id,
+      deleted: false
+    });
+    if (articleCategory) {
+      res.render("admin/pages/article-category/detail", {
+        pageTitle: "Chi tiết sản phẩm",
+        articleCategory: articleCategory
+      });
+    } else {
+      res.redirect(`${systemConfig.prefixAdmin}/article-category`);
+    }
+  } catch (error) {
+    res.redirect(`${systemConfig.prefixAdmin}/article-category`);
+  }
+}
+// [PATCH] /admin/article-category/change-status/:statusChange/:id
 module.exports.changeStatus = async (req, res) => {
-  if (res.locals.role.permissions.includes("products-category_edit")) {
+  if (res.locals.role.permissions.includes("article-category_edit")) {
     try {
       const {
         id, statusChange
       } = req.params;
-      await ProductCategory.updateOne({
+      await ArticleCategory.updateOne({
         _id: id
       }, {
         status: statusChange
@@ -100,119 +197,19 @@ module.exports.changeStatus = async (req, res) => {
         code: 200
       });
     } catch (error) {
-      res.redirect(`/${systemConfig.prefixAdmin}/products-category`);
+      res.redirect(`/${systemConfig.prefixAdmin}/article-category`);
     }
 
   } else {
     res.send(`403`);
   }
 }
-// [GET] /admin/products-category/create
-module.exports.create = async (req, res) => {
-  const categories = await ProductCategory.find({
-    deleted: false
-  });
-  const newCategories = createTreeHelper(categories);
-  res.render("admin/pages/products-category/create", {
-    pageTitle: "Thêm mới danh mục sản phẩm",
-    categories: newCategories
-  }
-  );
-}
-
-// [POST] /admin/products-category/create
-module.exports.createPost = async (req, res) => {
-  if (res.locals.role.permissions.includes("products-category_create")) {
-    if (req.body.position) {
-      req.body.position = parseInt(req.body.position);
-    } else {
-      const countCategory = await ProductCategory.countDocuments({});
-      req.body.position = countCategory + 1;
-    }
-    req.body.createdBy = res.locals.account.id;
-    const newCategory = new ProductCategory(req.body);
-    await newCategory.save();
-    res.redirect(`/${systemConfig.prefixAdmin}/products-category`);
-  } else {
-    res.send(`403`);
-  }
-}
-// [GET] /admin/products-category/edit/:id
-module.exports.edit = async (req, res) => {
-  try {
-    const id = req.params.id;
-    const categories = await ProductCategory.find({
-      deleted: false
-    });
-    const category = await ProductCategory.findOne({
-      _id: id,
-      deleted: false
-    });
-
-    const newCategories = createTreeHelper(categories);
-    res.render("admin/pages/products-category/edit", {
-      pageTitle: "Chỉnh sửa danh mục",
-      categories: newCategories,
-      category: category
-    }
-    );
-
-  } catch (error) {
-    res.redirect(`${systemConfig.prefixAdmin}/products-category`);
-  }
-}
-// [PATCH] /admin/products-category/edit/:id
-module.exports.editPatch = async (req, res) => {
-  if (res.locals.role.permissions.includes("products-category_edit")) {
-    try {
-      const id = req.params.id;
-      if (req.body.position) {
-        req.body.position = parseInt(req.body.position);
-      } else {
-        const countCategory = await ProductCategory.countDocuments({});
-        req.body.position = countCategory + 1;
-      }
-      req.body.updatedBy = res.locals.account.id;
-      await ProductCategory.updateOne({
-        _id: id,
-        deleted: false
-      }, req.body);
-      req.flash("success", "Cập nhật sản phẩm thành công!");
-
-    } catch (error) {
-      req.flash("error", "Id sản phẩm không hợp lệ !");
-    }
-    res.redirect("back");
-  } else {
-    res.send(`403`);
-  }
-}
-// [GET] /admin/products-category/detail/:id
-module.exports.detail = async (req, res) => {
-  try {
-    const id = req.params.id;
-    const productCategory = await ProductCategory.findOne({
-      _id: id,
-      deleted: false
-    });
-    if (productCategory) {
-      res.render("admin/pages/products-category/detail", {
-        pageTitle: "Chi tiết sản phẩm",
-        productCategory: productCategory
-      });
-    } else {
-      res.redirect(`${systemConfig.prefixAdmin}/products-category`);
-    }
-  } catch (error) {
-    res.redirect(`${systemConfig.prefixAdmin}/products-category`);
-  }
-}
-// [PATCH] /admin/products-category/delete/:id
+// [PATCH] /admin/article-category/delete/:id
 module.exports.deleteItem = async (req, res) => {
-  if (res.locals.role.permissions.includes("products-category_delete")) {
+  if (res.locals.role.permissions.includes("article-category_delete")) {
     try {
       const id = req.params.id;
-      await ProductCategory.updateOne({
+      await ArticleCategory.updateOne({
         _id: id
       }, {
         deleted: true,
@@ -223,20 +220,20 @@ module.exports.deleteItem = async (req, res) => {
         code: 200,
       });
     } catch (error) {
-      res.redirect(`${systemConfig.prefixAdmin}/products-category`);
+      res.redirect(`${systemConfig.prefixAdmin}/article-category`);
     }
   } else {
     res.send(`403`);
   }
 }
-// [PATCH] /admin/products-category/change-position/:id
+// [PATCH] /admin/article-category/change-position/:id
 module.exports.changePosition = async (req, res) => {
-  if (res.locals.role.permissions.includes("products-category_edit")) {
+  if (res.locals.role.permissions.includes("article-category_edit")) {
 
     try {
       const id = req.params.id;
       const position = req.body.position;
-      await ProductCategory.updateOne({
+      await ArticleCategory.updateOne({
         _id: id
       }, {
         position: position
@@ -245,32 +242,31 @@ module.exports.changePosition = async (req, res) => {
         code: 200,
       });
     } catch (error) {
-      res.redirect(`${systemConfig.prefixAdmin}/products-category`);
+      res.redirect(`${systemConfig.prefixAdmin}/article-category`);
     }
   } else {
     res.send(`403`);
   }
 }
-// [PATCH] /admin/products-category/change-multi
+// [PATCH] /admin/article-category/change-multi
 module.exports.changeMulti = async (req, res) => {
-  if (res.locals.role.permissions.includes("products-category_edit")) {
+  if (res.locals.role.permissions.includes("article-category_edit")) {
     try {
       const {
         status,
         ids
       } = req.body;
-      console.log(req.body);
       switch (status) {
         case "active":
         case "inactive":
-          await ProductCategory.updateMany({
+          await ArticleCategory.updateMany({
             _id: ids
           }, {
             status: status
           });
           break;
         case "delete":
-          await ProductCategory.updateMany({
+          await ArticleCategory.updateMany({
             _id: ids
           }, {
             deleted: true
@@ -283,13 +279,13 @@ module.exports.changeMulti = async (req, res) => {
         code: 200
       });
     } catch (error) {
-      res.redirect(`/${systemConfig.prefixAdmin}/products-category`);
+      res.redirect(`/${systemConfig.prefixAdmin}/article-category`);
     }
   } else {
     res.send(`403`);
   }
 }
-// [GET] /admin/products-category/trash
+// [GET] /admin/article-category/trash
 module.exports.trash = async (req, res) => {
   const find = {
     deleted: true
@@ -318,7 +314,7 @@ module.exports.trash = async (req, res) => {
   // Hết tìm kiếm
 
   // Phân trang
-  const pagination = await paginationHelper.paginationProductCategory(req, find);
+  const pagination = await paginationHelper.paginationArticleCategory(req, find);
   // Hết phân trang
   //Sắp xếp
   const sort = {};
@@ -328,12 +324,12 @@ module.exports.trash = async (req, res) => {
     sort.position = "desc";
   }
   // Hết sắp xếp
-  const productCategory = await ProductCategory
+  const articleCategory = await ArticleCategory
     .find(find)
     .limit(pagination.limitItems) // số lượng tối thiểu 
     .skip(pagination.skip) // bỏ qua
     .sort(sort);
-  for (const item of productCategory) {
+  for (const item of articleCategory) {
     if (item.createdBy) {
       const accountCreated = await Account.findOne({
         _id: item.createdBy
@@ -364,40 +360,40 @@ module.exports.trash = async (req, res) => {
 
     item.updatedAtFormat = moment(item.updatedAt).format("DD/MM/YY HH:mm:ss");
   }
-  res.render("admin/pages/products-category/trash", {
+  res.render("admin/pages/article-category/trash", {
     pageTitle: "Trang thùng rác",
-    productCategory: productCategory,
+    articleCategory: articleCategory,
     keyword: keyword,
     filterStatus: filterStatus,
     pagination: pagination
   });
 }
-// [GET] /admin/products-category/detail/:id
+// [GET] /admin/article-category/detail/:id
 module.exports.detailTrash = async (req, res) => {
   try {
     const id = req.params.id;
-    const productCategory = await ProductCategory.findOne({
+    const articleCategory = await ArticleCategory.findOne({
       _id: id,
       deleted: true
     });
-    if (productCategory) {
-      res.render("admin/pages/products-category/detail", {
+    if (articleCategory) {
+      res.render("admin/pages/article-category/detail", {
         pageTitle: "Chi tiết danh mục",
-        productCategory: productCategory
+        articleCategory: articleCategory
       });
     } else {
-      res.redirect(`${systemConfig.prefixAdmin}/products-category/trash`);
+      res.redirect(`${systemConfig.prefixAdmin}/article-category/trash`);
     }
   } catch (error) {
-    res.redirect(`${systemConfig.prefixAdmin}/products-category/trash`);
+    res.redirect(`${systemConfig.prefixAdmin}/article-category/trash`);
   }
 }
-// [PATCH] /admin/products-category/restore/:id
+// [PATCH] /admin/article-category/restore/:id
 module.exports.restore = async (req, res) => {
-  if (res.locals.role.permissions.includes("products-category_edit")) {
+  if (res.locals.role.permissions.includes("article-category_edit")) {
     try {
       const id = req.params.id;
-      await ProductCategory.updateOne({
+      await ArticleCategory.updateOne({
         _id: id
       }, {
         deleted: false,
@@ -409,20 +405,19 @@ module.exports.restore = async (req, res) => {
         code: 200
       });
     } catch (error) {
-      res.redirect(`/${systemConfig.prefixAdmin}/products-category/trash`);
+      res.redirect(`/${systemConfig.prefixAdmin}/article-category/trash`);
     }
   }
   else {
     res.send(`403`);
   }
 }
-// [DELETE] /admin/products-catgory/deletePermanently/:id
+// [DELETE] /admin/article-category/deletePermanently/:id
 module.exports.deletePermanently = async (req, res) => {
-  if (res.locals.role.permissions.includes("products-category_delete")) {
+  if (res.locals.role.permissions.includes("article-category_delete")) {
     try {
       const id = req.params.id;
-      console.log(id);
-      await ProductCategory.deleteOne({
+      await ArticleCategory.deleteOne({
         _id: id
 
       }, {
@@ -434,16 +429,16 @@ module.exports.deletePermanently = async (req, res) => {
         code: 200
       });
     } catch (error) {
-      res.redirect(`/${systemConfig.prefixAdmin}/products-category/trash`);
+      res.redirect(`/${systemConfig.prefixAdmin}/article-category/trash`);
     }
   }
   else {
     res.send(`403`);
   }
 }
-// [PATCH] /admin/products-category/trash/change-multi
+// [PATCH] /admin/article-category/trash/change-multi
 module.exports.changeMultiRestore = async (req, res) => {
-  if (res.locals.role.permissions.includes("products-category_edit")) {
+  if (res.locals.role.permissions.includes("article-category_edit")) {
     try {
       const {
         acts,
@@ -451,16 +446,18 @@ module.exports.changeMultiRestore = async (req, res) => {
       } = req.body;
       switch (acts) {
         case "restore":
-          await ProductCategory.updateMany({
+          await ArticleCategory.updateMany({
             _id: ids
           }, {
             deleted: false
           });
+          req.flash('success', 'Khôi phục thành công!');
           break;
         case "delete-permanently":
-          await ProductCategory.deleteMany({
+          await ArticleCategory.deleteMany({
             _id: ids
           });
+          req.flash('success', 'Đã xóa khỏi thùng rác!');
           break;
         default:
           break;
@@ -469,7 +466,7 @@ module.exports.changeMultiRestore = async (req, res) => {
         code: 200
       });
     } catch (error) {
-      res.redirect(`/${systemConfig.prefixAdmin}/products-category/trash`);
+      res.redirect(`/${systemConfig.prefixAdmin}/article-category/trash`);
     }
   } else {
     res.send(`403`);

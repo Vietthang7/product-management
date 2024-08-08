@@ -1,11 +1,11 @@
 extends ../../layouts/default.pug
 include ../../mixins/select-tree.pug
 block main
-  if(role.permissions.includes("posts_create"))
+  if(role.permissions.includes("posts_edit"))
     h1(class="mb-4") #{pageTitle}
 
     form(
-      action=`/${prefixAdmin}/posts/create`
+      action=`/${prefixAdmin}/posts/edit/${post.id}?_method=PATCH`
       method="POST"
       enctype="multipart/form-data"
     )
@@ -17,6 +17,7 @@ block main
           id="title"
           name="title"
           required
+          value=post.title
         )
       div(class="form-group")
         label(for="post_category_id") Danh mục
@@ -27,7 +28,7 @@ block main
         )
           option(value="") -- Chọn danh mục --
           if(categories)
-            +select-tree(categories)
+            +select-tree(categories,1,post.post_category_id)
       div(class="form-group form-check form-check-inline")
         input(
           type="radio"
@@ -35,6 +36,7 @@ block main
           id="featured1"
           name="featured"
           value="1"
+          checked=(post.featured == "1" ? true : false)
         )
         label(for="featured1" class="form-check-label") Nổi bật
       div(class="form-group form-check form-check-inline")
@@ -44,19 +46,18 @@ block main
           id="featured0"
           name="featured"
           value="0"
-          checked
+          checked=(post.featured == "0" ? true : false)
         )
         label(for="featured0" class="form-check-label") Không nổi bật
       div(class="form-group")
-        label(for="desc") Nội dung bài viết
+        label(for="desc") Mô tả
         textarea(
           class="form-control"
           id="desc"
           name="description"
           rows="5"
-          placeholder="Nhập nội dung bài viết"
           textarea-mce
-        )
+        ) #{post.description}
       div(
         class="form-group"
         upload-image
@@ -71,7 +72,7 @@ block main
           upload-image-input
         )
         img(
-          src=""
+          src=post.thumbnail
           class="image-preview"
           upload-image-preview
         )
@@ -84,6 +85,7 @@ block main
           name="position"
           placeholder="Tự động tăng"
           min="1"
+          value=post.position
         )
       div(class="form-group form-check form-check-inline")
         input(
@@ -92,7 +94,7 @@ block main
           id="statusActive"
           name="status"
           value="active"
-          checked
+          checked=(post.status == "active" ? true : false)
         )
         label(for="statusActive" class="form-check-label") Hoạt động
       div(class="form-group form-check form-check-inline")
@@ -102,10 +104,11 @@ block main
           id="statusInActive"
           name="status"
           value="inactive"
+          checked=(post.status == "inactive" ? true : false)
         )
         label(for="statusInActive" class="form-check-label") Dừng hoạt động
       div(class="form-group")
         button(
           type="submit"
           class="btn btn-primary"
-        ) Tạo mới
+        ) Cập nhật

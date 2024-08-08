@@ -1,0 +1,27 @@
+extends ../../layouts/default.pug
+
+block main
+  if (articleCategory.title)
+    h1(class="mb-4") #{articleCategory.title}
+  if (articleCategory.thumbnail)
+    div(class="mb-4")
+      img(
+        src=articleCategory.thumbnail
+        style="width: 100px"
+      )
+
+  if (articleCategory.status)
+    div(class="mb-4")
+      span Trạng thái:
+      if (articleCategory.status === "active")
+        span(class="badge badge-success") Hoạt động
+      else
+        span(class="badge badge-danger") Dừng hoạt động
+  if(articleCategory.deleted)
+    div(class="mb-4")
+      span(class="badge badge-danger") Đã xóa
+  if (articleCategory.position)
+    div(class="mb-4") Vị trí: <b>#{articleCategory.position}</b>
+
+  if (articleCategory.description)
+    div(class="mb-4") <b>Mô tả:</b> !{articleCategory.description}

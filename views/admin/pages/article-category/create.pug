@@ -1,11 +1,12 @@
 extends ../../layouts/default.pug
 include ../../mixins/select-tree.pug
+
 block main
-  if(role.permissions.includes("posts_create"))
+  if(role.permissions.includes("article-category_create"))
     h1(class="mb-4") #{pageTitle}
 
     form(
-      action=`/${prefixAdmin}/posts/create`
+      action=`/${prefixAdmin}/article-category/create`
       method="POST"
       enctype="multipart/form-data"
     )
@@ -19,55 +20,36 @@ block main
           required
         )
       div(class="form-group")
-        label(for="post_category_id") Danh mục
+        label(for="parent_id") Danh mục cha
         select(
-          name="post_category_id"
+          name="parent_id"
           class="form-control"
-          id="post_category_id"
+          id="parent_id"
         )
-          option(value="") -- Chọn danh mục --
+          option(value="") -- Chọn danh mục cha --
           if(categories)
             +select-tree(categories)
-      div(class="form-group form-check form-check-inline")
-        input(
-          type="radio"
-          class="form-check-input"
-          id="featured1"
-          name="featured"
-          value="1"
-        )
-        label(for="featured1" class="form-check-label") Nổi bật
-      div(class="form-group form-check form-check-inline")
-        input(
-          type="radio"
-          class="form-check-input"
-          id="featured0"
-          name="featured"
-          value="0"
-          checked
-        )
-        label(for="featured0" class="form-check-label") Không nổi bật
       div(class="form-group")
-        label(for="desc") Nội dung bài viết
+        label(for="desc") Mô tả
         textarea(
+          type="text"
           class="form-control"
           id="desc"
           name="description"
           rows="5"
-          placeholder="Nhập nội dung bài viết"
           textarea-mce
         )
       div(
         class="form-group"
         upload-image
-        )
+      )
         label(for="thumbnail") Ảnh
         input(
           type="file"
           class="form-control-file"
           id="thumbnail"
           name="thumbnail"
-          accept = "image/*"
+          accept="image/*"
           upload-image-input
         )
         img(

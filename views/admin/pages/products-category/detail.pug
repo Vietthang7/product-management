@@ -3,16 +3,7 @@ extends ../../layouts/default.pug
 block main
   if (productCategory.title)
     h1(class="mb-4") #{productCategory.title}
-
-  if (productCategory.price)
-    div(class="mb-4") Giá: <b>#{productCategory.price}$</b>
-
-  if (productCategory.discountPercentage)
-    div(class="mb-4") Giảm giá: <b>#{productCategory.discountPercentage}%</b>
-
-  if (productCategory.stock)
-    div(class="mb-4") Còn lại: <b>#{productCategory.stock}</b>
-
+    
   if (productCategory.thumbnail)
     div(class="mb-4")
       img(
@@ -27,6 +18,9 @@ block main
         span(class="badge badge-success") Hoạt động
       else
         span(class="badge badge-danger") Dừng hoạt động
+  if(productCategory.deleted)
+    div(class="mb-4")
+      span(class="badge badge-danger") Đã xóa
 
   if (productCategory.position)
     div(class="mb-4") Vị trí: <b>#{productCategory.position}</b>

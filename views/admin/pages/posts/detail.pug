@@ -1,0 +1,27 @@
+extends ../../layouts/default.pug
+
+block main
+  if (post.title)
+    h1(class="mb-4") #{post.title}
+  if (post.thumbnail)
+    div(class="mb-4")
+      img(
+        src=post.thumbnail
+        style="width: 100px"
+      )
+
+  if (post.status)
+    div(class="mb-4")
+      span Trạng thái:
+      if (post.status === "active")
+        span(class="badge badge-success") Hoạt động
+      else
+        span(class="badge badge-danger") Dừng hoạt động
+  if(post.deleted)
+    div(class="mb-4")
+      span(class="badge badge-danger") Đã xóa
+  if (post.position)
+    div(class="mb-4") Vị trí: <b>#{post.position}</b>
+
+  if (post.description) 
+    div(class="mb-4") Nội dung bài viết: <br>!{post.description}
