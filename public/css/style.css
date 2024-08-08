@@ -229,7 +229,7 @@
 .chat .inner-body {
   padding: 10px;
   height: 450px;
-  overflow: scroll;
+  overflow: auto;
 }
 
 .chat .inner-body .inner-name {
@@ -280,3 +280,20 @@
   cursor: pointer;
 }
 /* End chat */
+
+
+/* Thêm hiệu ứng hover cho nút gửi */  
+.chat .inner-form button:hover {  
+  background: #e03e84; /* Màu sắc khi di chuột */  
+}
+
+/* Tooltip */
+.tooltip {
+  visibility: hidden;
+}
+
+.tooltip.shown {
+  visibility: visible;
+  opacity: 1;
+}
+/* End Tooltip */
