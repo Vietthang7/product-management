@@ -20,12 +20,12 @@ if (inputChat) {
 // SERVER_RETURN_TYPING
 const elementListTyping = document.querySelector(".chat .inner-list-typing");
 socket.on("SERVER_RETURN_TYPING", (data) => {
-  if(data.type == "show"){
+  if (data.type == "show") {
     const exitstTyping = elementListTyping.querySelector(`[user-id="${data.userId}"]`);
-    if(!exitstTyping){
+    if (!exitstTyping) {
       const boxTyping = document.createElement("div");
       boxTyping.classList.add("box-typing");
-      boxTyping.setAttribute("user-id" , data.userId);
+      boxTyping.setAttribute("user-id", data.userId);
       boxTyping.innerHTML = `
       <div class="inner-name">${data.fullName}</div>
       <div class="inner-dots"><span></span><span></span><span></span></div>
@@ -34,7 +34,7 @@ socket.on("SERVER_RETURN_TYPING", (data) => {
     }
   } else {
     const boxTypingDelete = elementListTyping.querySelector(`[user-id="${data.userId}"]`);
-    if(boxTypingDelete){
+    if (boxTypingDelete) {
       elementListTyping.removeChild(boxTypingDelete);
     }
   }
@@ -45,16 +45,23 @@ socket.on("SERVER_RETURN_TYPING", (data) => {
 //CLIENT_SEND_MESSAGE  
 const formChat = document.querySelector(".chat .inner-form");
 if (formChat) {
+  const upload = new FileUploadWithPreview.FileUploadWithPreview('upload-images', {
+    multiple: true,
+    maxFileCount: 6
+  });
   formChat.addEventListener("submit", (event) => {
     event.preventDefault();
 
-    const content = event.target.content.value;
-    if (content) {
+    const content = event.target.content.value || "";
+    const images = upload.cachedFileArray;
+    if (content || images.length > 0) {
       socket.emit("CLIENT_SEND_MESSAGE", {
-        content: content
+        content: content,
+        images: images
       });
       event.target.content.value = "";
-      socket.emit("CLIENT_SEND_TYPING" , "hidden");
+      upload.resetPreviewPanel();
+      socket.emit("CLIENT_SEND_TYPING", "hidden");
 
       // Cuộn nội dung trò chuyện xuống phía dưới sau khi gửi tin nhắn  
       const bodyChat = document.querySelector(".chat .inner-body");
@@ -74,6 +81,9 @@ socket.on("SERVER_RETURN_MESSAGE", (data) => {
   const myId = document.querySelector("[my-id]").getAttribute("my-id");
   const div = document.createElement("div");
   let htmlFullName = "";
+  let htmlContent = "";
+  let htmlImages = "";
+
   const body = document.querySelector(".chat .inner-body");
   let checkScroll = false;
   if (data.userId == myId) {
@@ -86,9 +96,27 @@ socket.on("SERVER_RETURN_MESSAGE", (data) => {
       checkScroll = true;
     }
   }
+  if (data.content) {
+    htmlContent = `<div class="inner-content">${data.content}</div>`;
+  }
+  if (data.images.length > 0) {
+    htmlImages += `<div class="inner-images">`;
 
-  div.innerHTML = `${htmlFullName}  
-  <div class="inner-content">${data.content}</div>`;
+    for (const image of data.images) {
+      htmlImages += `
+        <img src="${image}">
+      `;
+    }
+    htmlImages += `
+    </div>
+    `;
+  }
+
+  div.innerHTML = `
+  ${htmlFullName}  
+  ${htmlContent}  
+  ${htmlImages}  
+  `;
 
   body.insertBefore(div, elementListTyping);
 
