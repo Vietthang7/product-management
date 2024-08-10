@@ -128,6 +128,7 @@ socket.on("SERVER_RETURN_MESSAGE", (data) => {
       body.scrollTop = body.scrollHeight; // cuộn xuống nếu thanh scroll của người nhận ở vị trí cuối cùng
     }
   }
+  new Viewer(div);
 
 });
 
@@ -172,3 +173,10 @@ document.addEventListener("click", (event) => {
     tooltip.classList.remove('shown');
   }
 });
+
+// Preview Image
+const bodyChatPreviewImage = document.querySelector(".chat .inner-body");
+if(bodyChat) {
+  new Viewer(bodyChatPreviewImage);
+}
+// End Preview Image
