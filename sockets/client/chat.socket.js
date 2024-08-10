@@ -1,6 +1,7 @@
 const streamUpload = require("../../helpers/streamUpload.helper");
 const Chat = require("../../models/chat.model");
 module.exports = (req, res) => {
+  try {
   const userId = res.locals.user.id;
   const fullName = res.locals.user.fullName;
   //SocketIO
@@ -38,4 +39,8 @@ module.exports = (req, res) => {
     })
   });
   //End SocketIO
+  } catch (error) {
+    res.redirect("/chat");
+  }
+  
 }

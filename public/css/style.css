@@ -251,8 +251,8 @@
   color: #fff;
 }
 .chat .inner-body .inner-images img {
-  width: 100px;
-  height: 100px;
+  width: 150px;
+  height: 150px;
   object-fit: contain;
   background: #efefef;
   padding: 10px;
