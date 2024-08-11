@@ -12,5 +12,3 @@ module.exports.valiPassword = async (req, res, next) => {
   }
   next();
 }
-
-
