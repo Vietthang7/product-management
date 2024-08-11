@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const multer = require('multer')
+const multer = require('multer');
 const validate = require("../../validates/admin/product.validate");
 const uploadToCloud = require("../../middlewares/admin/uploadCloud.middleware");
 
