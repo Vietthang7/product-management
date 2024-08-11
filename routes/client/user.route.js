@@ -16,6 +16,6 @@ router.post("/password/otp", controller.otpPasswordPost);
 router.get("/password/reset",userMiddleware.requireAuth,controller.resetPassword);
 router.patch("/password/reset", userMiddleware.requireAuth,validate.valiPassword, controller.resetPasswordPatch);
 router.get("/profile",userMiddleware.requireAuth,controller.profile);
-router.get("/password-old", controller.oldPassword);
-router.post("/password-old",validate.valiPassword,controller.oldPasswordPost);
+router.get("/password-old",userMiddleware.requireAuth,controller.oldPassword);
+router.post("/password-old",userMiddleware.requireAuth,validate.valiPassword,controller.oldPasswordPost);
 module.exports = router;

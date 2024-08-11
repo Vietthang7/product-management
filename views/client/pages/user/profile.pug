@@ -10,4 +10,6 @@ block main
         div Họ và tên: #{user.fullName}
         div  Email : #{user.email}
       .col-2 
-        a(href="/user/password-old" class="btn btn-primary btn-block") Đổi mật khẩu 
+        a(href="/user/edit/:id" class="btn btn-dark btn-block") Chỉnh sửa
+      .col-2 
+        a(href="/user/password-old" class="btn btn-primary btn-block") Đổi mật khẩu
