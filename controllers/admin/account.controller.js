@@ -102,6 +102,15 @@ module.exports.create = async (req, res) => {
 // [POST] /admin/accounts/create
 module.exports.createPost = async (req, res) => {
   if (res.locals.role.permissions.includes("accounts_create")) {
+    const existAccountTrash = await Account.findOne({
+      email: req.body.email,
+      deleted: true
+    })
+    if(existAccountTrash){
+      req.flash("error", "Tài khoản đã tồn tại và nằm trong thùng rác");
+      res.redirect("back");
+      return;
+    }
     const existAccount = await Account.findOne({
       email: req.body.email,
       deleted: false
@@ -208,7 +217,7 @@ module.exports.deleteItem = async (req, res) => {
         deleted: true,
         deletedBy: res.locals.account.id
       });
-      req.flash('success', 'Cập nhật trạng thái thành công!');
+      req.flash('success', 'Đã chuyển vào thùng rác!');
       res.json({
         code: 200
       })

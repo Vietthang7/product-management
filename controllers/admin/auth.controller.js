@@ -15,6 +15,15 @@ module.exports.loginPost = async (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
 
+  const existAccount = await Account.findOne({
+    email: email,
+    deleted: true
+  });
+  if (existAccount) {
+    req.flash("error", "Tài khoản đã bị khóa!");
+    res.redirect("back");
+    return;
+  }
   const account = await Account.findOne({
     email: email,
     deleted: false

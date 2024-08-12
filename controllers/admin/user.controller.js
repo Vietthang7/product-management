@@ -93,6 +93,15 @@ module.exports.create = async (req, res) => {
 // [POST] /admin/users/create
 module.exports.createPost = async (req, res) => {
   if (res.locals.role.permissions.includes("users_create")) {
+    const existUserTrash = await User.findOne({
+      email: req.body.email,
+      deleted: true
+    })
+    if(existUserTrash){
+      req.flash("error", "Tài khoản đã tồn tại và nằm trong thùng rác");
+      res.redirect("back");
+      return;
+    }
     const existUser = await User.findOne({
       email: req.body.email,
       deleted: false

@@ -12,6 +12,11 @@ module.exports.infoUser = async (req, res, next) => {
   next();
 }
 module.exports.Register = async (req, res, next) => {
+  if (!req.body.fullName) {
+    req.flash("error", "Vui lòng điền đầy đủ họ tên !");
+    res.redirect("back");
+    return;
+  }
   if (!req.body.email) {
     req.flash("error", "Vui lòng điền đầy đủ thông tin email !");
     res.redirect("back");
@@ -27,6 +32,27 @@ module.exports.Register = async (req, res, next) => {
     req.flash("error", "Mật khẩu tối thiểu có 8 kí tự");
     res.redirect("back");
     return;
+  }
+  next();
+}
+module.exports.editPatch = async (req, res, next) => {
+  if (!req.body.fullName) {
+    req.flash("error", "Vui lòng điền đầy đủ họ tên !");
+    res.redirect("back");
+    return;
+  }
+  if (!req.body.email) {
+    req.flash("error", "Vui lòng điền đầy đủ thông tin email !");
+    res.redirect("back");
+    return;
+  }
+  if (req.body.password) {
+    const minLength = 8;
+    if (req.body.password.length < minLength) {
+      req.flash("error", "Mật khẩu tối thiểu có 8 kí tự");
+      res.redirect("back");
+      return;
+    }
   }
   next();
 }
