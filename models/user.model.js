@@ -7,6 +7,9 @@ const userSchema = new mongoose.Schema({
   password: String,
   tokenUser: String,
   avatar: String,
+  createdBy: String,
+  updatedBy: String,
+  deletedBy: String,
   status: {
     type: String,
     default: "active"

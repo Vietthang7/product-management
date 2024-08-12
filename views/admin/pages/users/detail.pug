@@ -1,0 +1,24 @@
+extends ../../layouts/default.pug
+
+block main
+  if (user.fullName)
+    h1(class="mb-4") #{user.fullName}
+  div(class="mb-4")
+    img(
+      src=user.avatar ? user.avatar : "/images/users.jpg"
+      style="width: 100px"
+    )
+  if (user.email)
+    h3(class="mb-4") #{user.email}
+  if (user.phone)
+    h3(class="mb-4") #{user.phone}
+  if (user.status)
+    div(class="mb-4")
+      span Trạng thái:
+      if (user.status === "active")
+        span(class="badge badge-success") Hoạt động
+      else
+        span(class="badge badge-danger") Dừng hoạt động
+  if(user.deleted)
+    div(class="mb-4")
+      span(class="badge badge-danger") Đã xóa

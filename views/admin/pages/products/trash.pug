@@ -27,6 +27,8 @@ block main
                   name="sort"
                   sort-select
                 )
+                  option(value="updatedAt-desc") Xóa mới nhất
+                  option(value="updatedAt-asc") Xóa cũ nhất
                   option(value="position-desc") Vị trí giảm dần
                   option(value="position-asc") Vị trí tăng dần
                   option(value="price-desc") Giá giảm dần
@@ -51,11 +53,11 @@ block main
               th Hình ảnh
               th Tiêu đề
               th Giá
+              th Vị trí
               if(role.permissions.includes("products_edit"))
-                th Vị trí
                 th Khôi phục
               th Tạo bởi
-              th Cập nhật
+              th Xóa bởi
               th Hành động
           tbody
             each item, index in products
@@ -76,16 +78,8 @@ block main
                   )
                 td #{item.title}
                 td #{item.price}$
+                td #{item.position}
                 if(role.permissions.includes("products_edit"))
-                  td
-                    input(
-                      link=`/${prefixAdmin}/products/change-position/${item.id}`
-                      type="number"
-                      name="position"
-                      value=item.position
-                      style="width: 60px"
-                      min="1"
-                    )
                   td
                     button(
                       link=`/${prefixAdmin}/products/trash/restore/${item.id}`

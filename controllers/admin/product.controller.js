@@ -45,7 +45,7 @@ module.exports.index = async (req, res) => {
   if (req.query.sortKey && req.query.sortValue) {
     sort[req.query.sortKey] = req.query.sortValue;
   } else {
-    sort.position = "desc";
+    sort.createdAt = "desc";
   }
   // Hết sắp xếp
   const products = await Product
@@ -288,7 +288,6 @@ module.exports.editPatch = async (req, res) => {
   }
 }
 // [GET] /admin/products/detail/:id
-
 module.exports.detail = async (req, res) => {
   try {
     const id = req.params.id;
@@ -344,7 +343,7 @@ module.exports.trash = async (req, res) => {
   if (req.query.sortKey && req.query.sortValue) {
     sort[req.query.sortKey] = req.query.sortValue;
   } else {
-    sort.position = "desc";
+    sort.updatedAt = "desc";
   }
   // Hết sắp xếp
   const products = await Product
@@ -477,7 +476,6 @@ module.exports.changeMultiRestore = async (req, res) => {
   }
 }
 // [GET] /admin/products/trash/detail/:id
-
 module.exports.detailTrash = async (req, res) => {
   try {
     const id = req.params.id;

@@ -44,7 +44,7 @@ module.exports.index = async (req, res) => {
   if (req.query.sortKey && req.query.sortValue) {
     sort[req.query.sortKey] = req.query.sortValue;
   } else {
-    sort.position = "desc";
+    sort.createdAt = "desc";
   }
   // Hết sắp xếp
   const posts = await Post
@@ -334,7 +334,7 @@ module.exports.trash = async (req, res) => {
   if (req.query.sortKey && req.query.sortValue) {
     sort[req.query.sortKey] = req.query.sortValue;
   } else {
-    sort.position = "desc";
+    sort.updatedAt = "desc";
   }
   // Hết sắp xếp
   const posts = await Post

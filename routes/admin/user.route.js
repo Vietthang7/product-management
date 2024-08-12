@@ -1,13 +1,12 @@
 const express = require("express");
 const router = express.Router();
+const multer = require('multer');
 const validate = require("../../validates/admin/account.validate.js");
-const multer  = require('multer');
 const uploadCloud = require("../../middlewares/admin/uploadCloud.middleware");
-
 const upload = multer();
-const controller = require("../../controllers/admin/account.controller.js");
-router.get("/",controller.index);
-router.get("/create",controller.create);
+const controller = require("../../controllers/admin/user.controller");
+router.get("/", controller.index);
+router.get("/create", controller.create);
 router.post(
   "/create",
   upload.single('avatar'),
@@ -16,6 +15,8 @@ router.post(
   controller.createPost
 );
 router.get("/edit/:id",controller.edit);
+router.patch("/delete/:id", controller.deleteItem);
+router.patch("/change-status/:statusChange/:id", controller.changeStatus);
 router.patch(
   "/edit/:id",
   upload.single('avatar'),
@@ -24,12 +25,10 @@ router.patch(
   controller.editPatch
 );
 router.get("/detail/:id",controller.detail);
-router.patch("/delete/:id",controller.deleteItem);
-router.patch("/change-status/:statusChange/:id", controller.changeStatus);
-router.patch("/change-multi", controller.changeMulti);
 router.get("/trash",controller.trash);
-router.get("/trash/detail/:id",controller.detailTrash);
-router.delete("/trash/deletePermanently/:id",controller.deletePermanently);
+router.patch("/change-multi", controller.changeMulti);
 router.patch("/trash/restore/:id", controller.restore);
 router.patch("/trash/change-multi", controller.changeMultiRestore);
+router.get("/trash/detail/:id", controller.detailTrash);
+router.delete("/trash/deletePermanently/:id",controller.deletePermanently);
 module.exports = router;

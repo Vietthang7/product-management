@@ -35,6 +35,14 @@ module.exports.index = async (req, res) => {
   }
   // Hết tìm kiếm
 
+    //Sắp xếp
+    const sort = {};
+    if (req.query.sortKey && req.query.sortValue) {
+      sort[req.query.sortKey] = req.query.sortValue;
+    } else {
+      sort.createdAt = "desc";
+    }
+    // Hết sắp xếp
   //Phân trang
   const pagination = await paginationHelper.paginationAccount(req, find);
   //Hết  Phân trang
@@ -43,6 +51,7 @@ module.exports.index = async (req, res) => {
     .find(find)
     .limit(pagination.limitItems) // số lượng tối thiểu 
     .skip(pagination.skip) // bỏ qua
+    .sort(sort);
   for (const item of records) {
     if (item.createdBy) {
       const accountCreated = await Account.findOne({
@@ -93,6 +102,15 @@ module.exports.create = async (req, res) => {
 // [POST] /admin/accounts/create
 module.exports.createPost = async (req, res) => {
   if (res.locals.role.permissions.includes("accounts_create")) {
+    const existAccount = await Account.findOne({
+      email: req.body.email,
+      deleted: false
+    })
+    if (existAccount) {
+      req.flash("error", "Email đã tồn tại");
+      res.redirect("back");
+      return;
+    }
     req.body.password = md5(req.body.password);
     req.body.token = generateHelper.generateRandomString(30);
     req.body.createdBy = res.locals.account.id;
@@ -147,7 +165,7 @@ module.exports.editPatch = async (req, res) => {
       }, req.body);
       req.flash("success", "Cập nhật thành công!");
     } catch (error) {
-      req.flash("error", "Id sản phẩm không hợp lệ!");
+      req.flash("error", "Id tài khoản không hợp lệ!");
     }
     res.redirect("back");
   } else {
@@ -187,8 +205,8 @@ module.exports.deleteItem = async (req, res) => {
       await Account.updateOne({
         _id: id
       }, {
-
-        deleted: true
+        deleted: true,
+        deletedBy: res.locals.account.id
       });
       req.flash('success', 'Cập nhật trạng thái thành công!');
       res.json({
@@ -304,7 +322,7 @@ module.exports.trash = async (req, res) => {
   if (req.query.sortKey && req.query.sortValue) {
     sort[req.query.sortKey] = req.query.sortValue;
   } else {
-    sort.position = "desc";
+    sort.updatedAt = "desc";
   }
   // Hết sắp xếp
   const accounts = await Account

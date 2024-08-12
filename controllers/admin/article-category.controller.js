@@ -42,7 +42,7 @@ module.exports.index = async (req, res) => {
   if (req.query.sortKey && req.query.sortValue) {
     sort[req.query.sortKey] = req.query.sortValue
   } else {
-    sort.position = "desc";
+    sort.createdAt = "desc";
   }
   const records = await ArticleCategory
     .find(find)
@@ -321,7 +321,7 @@ module.exports.trash = async (req, res) => {
   if (req.query.sortKey && req.query.sortValue) {
     sort[req.query.sortKey] = req.query.sortValue;
   } else {
-    sort.position = "desc";
+    sort.updatedAt = "desc";
   }
   // Hết sắp xếp
   const articleCategory = await ArticleCategory

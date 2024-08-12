@@ -27,6 +27,8 @@ block main
                   name="sort"
                   sort-select
                 )
+                  option(value="updatedAt-desc") Xóa mới nhất
+                  option(value="updatedAt-asc") Xóa cũ nhất
                   option(value="position-desc") Vị trí giảm dần
                   option(value="position-asc") Vị trí tăng dần
                   option(value="title-asc") Tiêu đề A - Z
@@ -52,7 +54,7 @@ block main
                 th Vị trí
                 th Khôi phục
               th Tạo bởi
-              th Cập nhật
+              th Xóa bởi
               th Hành động
           tbody
             each item, index in productCategory
@@ -72,16 +74,8 @@ block main
                     height="auto"
                   )
                 td #{item.title}
+                td #{item.position}
                 if(role.permissions.includes("products-category_edit"))
-                  td
-                    input(
-                      link=`/${prefixAdmin}/products-category/change-position/${item.id}`
-                      type="number"
-                      name="position"
-                      value=item.position
-                      style="width: 60px"
-                      min="1"
-                    )
                   td
                     button(
                       link=`/${prefixAdmin}/products-category/trash/restore/${item.id}`

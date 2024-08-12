@@ -10,7 +10,7 @@ const profileRoute = require("./profile.route");
 const settingRoute = require("./setting.route");
 const postRoute = require("./post.route");
 const articleCategoryRoute = require("./article-category.route");
-
+const userRoute = require("./user.route");
 
 module.exports.index = (app) => {
     const path = `/${systemConfig.prefixAdmin}`;
@@ -42,6 +42,9 @@ module.exports.index = (app) => {
     app.use(`${path}/article-category`,
         authMiddleware.requireAuth, 
         articleCategoryRoute);
+    app.use(`${path}/users`,
+        authMiddleware.requireAuth, 
+        userRoute);
     app.use(`${path}/auth`, authRoute);
 }
 

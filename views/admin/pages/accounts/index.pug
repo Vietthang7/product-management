@@ -20,6 +20,27 @@ block main
         .card-header Hành động
           .card-body
             +box-actions(`/${prefixAdmin}/accounts/change-multi`)
+      .card.mb-3
+        .card-header Sắp xếp
+        .card-body
+          .row
+            .col-5
+              div(sort)
+                select(
+                  class="form-control"
+                  name="sort"
+                  sort-select
+                )
+                  option(value="createdAt-asc") Tạo cũ nhất
+                  option(value="createdAt-desc") Tạo mới nhất
+                  option(value="fullName-asc") Tiêu đề A - Z
+                  option(value="fullName-desc") Tiêu đề Z - A
+
+                button(
+                  class="btn btn-danger mt-2"
+                  sort-clear
+                ) Clear
+
     .card.mb-3
       .card-header Danh sách
       .card-body
