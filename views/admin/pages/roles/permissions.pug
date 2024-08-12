@@ -342,3 +342,27 @@ block main
                 data-name="users_delete"
                 checked=(item.permissions.includes("users_delete") ? true : false)
               )
+        //- Cài đặt chung
+        tr
+          td(colspan="4")
+            b Cài đặt chung
+        tr
+          td Xem
+          each item in records
+            td(class="text-center")
+              input(
+                type="checkbox" 
+                data-id=item.id 
+                data-name="settings-general_view"
+                checked=(item.permissions.includes("settings-general_view") ? true : false)
+              )
+        tr
+          td Chỉnh sửa
+          each item in records
+            td(class="text-center")
+              input(
+                type="checkbox" 
+                data-id=item.id
+                data-name="settings-general_edit"
+                checked=(item.permissions.includes("settings-general_edit") ? true : false)
+              )
