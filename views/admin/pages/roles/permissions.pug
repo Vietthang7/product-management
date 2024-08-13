@@ -366,3 +366,37 @@ block main
                 data-name="settings-general_edit"
                 checked=(item.permissions.includes("settings-general_edit") ? true : false)
               )
+        //- Đơn hàng
+        tr
+          td(colspan="4")
+            b Đơn hàng
+        tr
+          td Xem
+          each item in records
+            td(class="text-center")
+              input(
+                type="checkbox" 
+                data-id=item.id 
+                data-name="orders_view"
+                checked=(item.permissions.includes("orders_view") ? true : false)
+              )
+        tr
+          td Chỉnh sửa
+          each item in records
+            td(class="text-center")
+              input(
+                type="checkbox" 
+                data-id=item.id
+                data-name="orders_edit"
+                checked=(item.permissions.includes("orders_edit") ? true : false)
+              )
+        tr
+          td Xóa
+          each item in records
+            td(class="text-center")
+              input(
+                type="checkbox" 
+                data-id=item.id
+                data-name="orders_delete"
+                checked=(item.permissions.includes("orders_delete") ? true : false)
+              )
