@@ -11,7 +11,8 @@ const settingMiddleware = require("../../middlewares/client/setting.middleware")
 const chatRoute = require("./chat.route");
 const usersRoute = require("./users.route");
 module.exports.index = (app) => {
-    app.use(categoryMiddleware.category);
+    app.use(categoryMiddleware.productCategory);
+    app.use(categoryMiddleware.articleCategory);
     app.use(cartMiddleware.cartId);
     app.use(userMiddleware.infoUser);
     app.use(settingMiddleware.setting);

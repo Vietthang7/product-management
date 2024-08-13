@@ -32,7 +32,11 @@ header.header
             li(class="sub-menu")
               a(href="/products") Sản phẩm
               if(layoutCategoryProducts)
-                +sub-menu(layoutCategoryProducts)
+                +sub-menuproduct(layoutCategoryProducts)
+            li(class="sub-menu")
+              a(href="/posts") Bài viết
+              if(layoutCategoryArticle)
+                +sub-menuproduct(layoutCategoryArticle)
             li
               a(href="/cart") Giỏ hàng (#{cartTotal})
             if(user)
