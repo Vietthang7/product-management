@@ -438,7 +438,7 @@
   border-radius: 5px;
 }
 /* End image-preview */
-/* product-detail */
+/* post-detail */
 .post-detail .inner-thumb img {
   width: 100%;
   height: auto;
@@ -453,4 +453,4 @@
   margin-bottom: 10px;
 }
 
-/* End product-detail */
+/* End post-detail */
