@@ -1,0 +1,9 @@
+mixin list-posts (posts)
+  each item in posts
+    .col-4.mb-3
+      .product-item
+        .inner-image
+          img(src=item.thumbnail, alt=item.title)
+        .inner-content
+          h3.inner-title
+            a(href=`/posts/detail/${item.slug}`) #{item.title}

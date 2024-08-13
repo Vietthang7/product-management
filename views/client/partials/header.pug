@@ -36,7 +36,7 @@ header.header
             li(class="sub-menu")
               a(href="/posts") Bài viết
               if(layoutCategoryArticle)
-                +sub-menuproduct(layoutCategoryArticle)
+                +sub-menupost(layoutCategoryArticle)
             li
               a(href="/cart") Giỏ hàng (#{cartTotal})
             if(user)
