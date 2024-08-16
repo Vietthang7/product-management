@@ -221,7 +221,9 @@ if (listInputPosition.length > 0) {
             })
                 .then(res => res.json())
                 .then(data => {
-                    // console.log(data);
+                    if(data.code == 200){
+                    window.location.reload();
+                    }
                 })
         });
     })
@@ -440,3 +442,19 @@ if (togglePasswordVisibilityConfirm && confirmPasswordInput) {
   });
 }
 //  End Lấy các phần tử liên quan đến việc hiện/ẩn mật khẩu
+
+// // Cập nhật số lượng sản phẩm trong giỏ hàng
+// const listInputQuantity = document.querySelectorAll("[order] input[name='quantity']");
+// if (listInputQuantity.length > 0) {
+//   listInputQuantity.forEach(input => {
+//     input.addEventListener("change", () => {
+//       const productId = input.getAttribute("product-id");
+//       const quantity = parseInt(input.value);
+
+//       if (productId && quantity > 0) {
+//         window.location.href = `/admin/orders/update/${productId}/${quantity}`;
+//       }
+//     })
+//   })
+// }
+// // Hết Cập nhật số lượng sản phẩm trong giỏ hàng

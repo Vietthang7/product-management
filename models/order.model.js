@@ -4,7 +4,8 @@ const orderSchema = new mongoose.Schema({
   userInfo : {
     fullName : String,
     phone:String,
-    address : String
+    address : String,
+    notes : String
   },
   products : [
     {
@@ -13,7 +14,15 @@ const orderSchema = new mongoose.Schema({
       discountPercentage : Number,
       quantity : Number
     }
-  ]
+  ],
+  totalPrice: { type: Number, default: 0 },
+  status: String,
+  deleted: {
+    type: Boolean,
+    default: false
+  },
+  updatedBy: String,
+  deletedBy:String,
 },{
     timestamps: true // Tự động thêm trường createdAt và updatedAt (https://mongoosejs.com/docs/timestamps.html)
 });

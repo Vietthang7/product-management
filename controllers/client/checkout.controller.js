@@ -31,21 +31,24 @@ module.exports.orderPost = async (req, res) => {
   const userInfo = req.body;
   const orderData = {
     userInfo: userInfo,
-    products: []
+    products: [],
+    status: "inactive"
   };
   const cart = await Cart.findOne({
     _id: cartId
   });
-  for (const item of cart.products) {
-    const productInfo = await Product.findOne({
-      _id: item.productId
-    });
-    orderData.products.push({
-      productId: item.productId,
-      price: productInfo.price,
-      discountPercentage: productInfo.discountPercentage,
-      quantity: item.quantity
-    });
+  if (cart.products.length > 0) {
+    for (const item of cart.products) {
+      const productInfo = await Product.findOne({
+        _id: item.productId
+      });
+      orderData.products.push({
+        productId: item.productId,
+        price: productInfo.price,
+        discountPercentage: productInfo.discountPercentage,
+        quantity: item.quantity
+      });
+    }
   }
   const order = new Order(orderData);
   await order.save();

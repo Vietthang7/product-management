@@ -1,9 +1,9 @@
 extends ../../layouts/default.pug
 
 block main
-  if(role.permissions.includes("settings-genneral_view"))
+  if(role.permissions.includes("settings-general_view"))
     h1 Cài đặt chung
-    if(role.permissions.includes("settings-genneral_edit"))
+    if(role.permissions.includes("settings-general_edit"))
       form(
         action=`/${prefixAdmin}/settings/general?_method=PATCH`
         method="POST"

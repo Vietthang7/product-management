@@ -1,0 +1,113 @@
+extends ../../layouts/default.pug
+include ../../mixins/filter-status.pug
+include ../../mixins/search.pug
+include ../../mixins/pagination.pug
+include ../../mixins/box-actions-orders.pug
+include ../../mixins/trash.pug
+block main
+  if(role.permissions.includes("orders_view"))
+    h1(class="mb-4") Quản lý đơn hàng
+    .card.mb-3
+      .card-header Bộ lọc và Tìm kiếm
+      .card-body
+        .row
+          .col-6
+            +filter-status(filterStatus)
+          .col-6
+            +search(keyword)
+    if(role.permissions.includes("orders_edit"))
+      .card.mb-3
+        .card-header Hành động
+          .card-body
+            +box-actions-orders(`/${prefixAdmin}/orders/change-multi`)
+      .card.mb-3
+        .card-header Sắp xếp
+        .card-body
+          .row
+            .col-5
+              div(sort)
+                select(
+                  class="form-control"
+                  name="sort"
+                  sort-select
+                )
+                  option(value="createdAt-desc") Tạo mới nhất
+                  option(value="createdAt-asc") Tạo cũ nhất
+                  option(value="totalPrice-desc") Tổng giá giảm dần
+                  option(value="totalPrice-asc")  Tổng giá tăng dần
+
+                button(
+                  class="btn btn-danger mt-2"
+                  sort-clear
+                ) Clear
+
+    .card.mb-3
+      .card-header Danh sách
+      .card-body
+        div(class="text-right mb-2")
+        table.table.table-hover.table-sm
+          thead
+            tr
+              th
+                input(name="checkAll" type = "checkbox")
+              th STT
+              th Mã đơn hàng
+              th Ngày đặt hàng
+              th Khách hàng
+              th Tổng giá
+              th Số sản phẩm
+              if(role.permissions.includes("orders_edit"))
+                th Trạng thái
+              th Cập nhật
+              th Hành động
+          tbody
+            each item, index in orders
+              tr
+                td
+                  input(
+                    name="checkItem" 
+                    type = "checkbox"
+                    value = item.id 
+                  ) 
+                td #{index+1}
+                td #{item.id}
+                td #{item.createdAtFormat}
+                td #{item.createdByFullName}
+                td #{item.totalPrice}$
+                td #{item.products.length}
+                if(role.permissions.includes("orders_edit"))
+                  td
+                    if(item.status == "active")
+                      button(
+                        link=`/${prefixAdmin}/orders/change-status/inactive/${item.id}` 
+                        class="badge badge-success"
+                        button-change-status
+                        ) Đã xác nhận
+                    else
+                      button(
+                        link=`/${prefixAdmin}/orders/change-status/active/${item.id}`
+                        class="badge badge-danger"
+                        button-change-status
+                        ) Chờ xác nhận
+                td
+                  div #{item.updatedByFullName}
+                  if(item.createdAtFormat!=item.updatedAtFormat)
+                    div #{item.updatedAtFormat}
+                td
+                  a(
+                    class="btn btn-info btn-sm"
+                    href = `/${prefixAdmin}/orders/detail/${item.id}`
+                    ) Chi tiết
+                  if(role.permissions.includes("orders_edit"))
+                    a(
+                      class="btn btn-warning btn-sm"
+                      href = `/${prefixAdmin}/orders/edit/${item.id}`
+                      ) Sửa
+                  if(role.permissions.includes("orders_delete"))
+                    button(
+                      class="btn btn-danger btn-sm ml-1"
+                      button-delete=`/${prefixAdmin}/orders/delete/${item.id}`
+                    ) Xóa
+    
+    +pagination(pagination)
+    +trash(`/${prefixAdmin}/orders/trash`)
