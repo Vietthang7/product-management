@@ -24,9 +24,15 @@ block main
               div(class="inner-buttons")
                 button(
                   class="btn btn-sm btn-primary mr-1"
+                  btn-message-friend
                 ) Nhắn tin
                 button(
                   class="btn btn-sm btn-primary mr-1"
                   btn-cancel-friended=user.id
                 ) Hủy kết bạn
+                button(
+                  class="btn btn-sm btn-primary mr-1"
+                  btn-deleted-friended
+                  disabled
+                ) Đã hủy kết bạn
                 

@@ -459,6 +459,20 @@
 .box-user.accepted [btn-accepted-friend] {
   display: inline-block;
 }
+.box-user [btn-deleted-friended] {
+  display: none;
+}
+.box-user.cancel [btn-message-friend] {
+  display: none;
+}
+
+.box-user.cancel [btn-cancel-friended] {
+  display: none;
+}
+
+.box-user.cancel [btn-deleted-friended] {
+  display: inline-block;
+}
 /* End box-user */
 /* image-preview */
 .image-preview {

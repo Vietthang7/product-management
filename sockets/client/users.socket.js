@@ -80,7 +80,7 @@ module.exports = (req, res) => {
         acceptFriends: userIdB
       });
 
-      if(existUserBInA) {
+      if (existUserBInA) {
         await User.updateOne({
           _id: userIdA
         }, {
@@ -103,7 +103,7 @@ module.exports = (req, res) => {
         requestFriends: userIdA
       });
 
-      if(existUserAInB) {
+      if (existUserAInB) {
         await User.updateOne({
           _id: userIdB
         }, {
@@ -121,6 +121,86 @@ module.exports = (req, res) => {
 
     })
     // End Chức năng chấp nhận kết bạn
-  })
 
+    // Chức năng từ chối kết bạn
+    socket.on("CLIENT_REFUSE_FRIEND", async (userIdB) => {
+      // Xóa id của B trong acceptFriend của A
+      const exitUserBInA = await User.findOne({
+        _id: userIdA,
+        acceptFriends: userIdB
+      });
+      if (exitUserBInA) {
+        await User.updateOne({
+          _id: userIdA
+        },
+          {
+            $pull: {
+              acceptFriends: userIdB
+            }
+          });
+      }
+      // Xóa id của A trong requestFriends của B
+      const exitUserAInB = await User.findOne({
+        _id: userIdB,
+        requestFriends: userIdA
+      });
+      if (exitUserAInB) {
+        await User.updateOne({
+          _id: userIdB
+        }, {
+          $pull: {
+            requestFriends: userIdA
+          }
+        });
+      }
+    })
+    // End Chức năng từ chối kết bạn
+
+    // Chức năng hủy kết bạn
+    socket.on("CLIENT_CANCEL_FRIENDED", async (userIdB) => {
+      // Xóa {userId, roomChatId} của B trong friendsList của A
+      const existUserBInA = await User.findOne({
+        _id: userIdA,
+        'friendsList': {
+          $elemMatch: { userId: userIdB }
+        }
+      });
+
+      if (existUserBInA) {
+        await User.updateOne({
+          _id: userIdA
+        }, {
+          $pull: {
+            friendsList: {
+              userId: userIdB,
+              roomChatId: ""
+            }
+          }
+        });
+      }
+
+      // Xóa {userId, roomChatId} của A trong friendsList của B
+      const existUserAInB = await User.findOne({
+        _id: userIdB,
+        'friendsList': {
+          $elemMatch: { userId: userIdA }
+        }
+      });
+
+      if (existUserAInB) {
+        await User.updateOne({
+          _id: userIdB
+        }, {
+          $pull: {
+            friendsList: {
+              userId: userIdA,
+              roomChatId: ""
+            }
+          }
+        });
+      }
+
+    })
+    // End Chức năng hủy kết bạn
+  });
 }
