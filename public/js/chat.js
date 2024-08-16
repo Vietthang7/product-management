@@ -1,5 +1,4 @@
 import * as Popper from 'https://cdn.jsdelivr.net/npm/@popperjs/core@^2/dist/esm/index.js';
-var socket = io();
 
 //Typing
 const inputChat = document.querySelector(".chat .inner-form input[name='content']");
@@ -169,9 +168,11 @@ if (buttonIcon) {
 document.addEventListener("click", (event) => {
   const buttonIcon = document.querySelector("[button-icon]");
   const tooltip = document.querySelector('.tooltip');
+  if(tooltip){
   if (!buttonIcon.contains(event.target) && !tooltip.contains(event.target) && tooltip.classList.contains('shown')) {
     tooltip.classList.remove('shown');
   }
+}
 });
 
 // Preview Image
