@@ -19,7 +19,7 @@ const listBtnCancelFriend = document.querySelectorAll("[btn-cancel-friend]");
 if (listBtnCancelFriend.length > 0) {
   listBtnCancelFriend.forEach(button => {
     button.addEventListener("click", () => {
-      // Việc 1: Thêm class "add" cho box-user
+      // Việc 1: Xóa class "add" cho box-user
       button.closest(".box-user").classList.remove("add");
       // Việc 2: Gửi lên server userIdB
       const userIdB = button.getAttribute("btn-cancel-friend");
@@ -28,3 +28,18 @@ if (listBtnCancelFriend.length > 0) {
   })
 }
 // End Chức năng hủy gửi yêu cầu
+
+// Chức năng chấp nhận kết bạn
+const listBtnAcceptFriend = document.querySelectorAll("[btn-accept-friend]");
+if (listBtnAcceptFriend.length > 0) {
+  listBtnAcceptFriend.forEach(button => {
+    button.addEventListener("click", () => {
+      // Việc 1: Thêm class "accepted" cho box-user
+      button.closest(".box-user").classList.add("accepted");
+      // Việc 2: Gửi lên server userIdB
+      const userIdB = button.getAttribute("btn-accept-friend");
+      socket.emit("CLIENT_ACCEPT_FRIEND",userIdB);
+    })
+  })
+} 
+// End Chức năng chấp nhận kết bạn 
