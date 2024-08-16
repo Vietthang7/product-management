@@ -36,6 +36,40 @@ module.exports = (req, res) =>{
       }
       })
       // End khi A gửi yêu cầu cho B
+
+      // Chức năng hủy gửi yêu cầu
+      socket.on("CLIENT_CANCEL_FRIEND", async (userIdB) =>{
+        // Xóa id của A trong acceptFriend của B
+        const exitUserAInB = await User.findOne({
+          _id : userIdB,
+          acceptFriend : userIdA
+        });
+        if(exitUserAInB){
+          await User.updateOne({
+            _id : userIdB
+          },
+        {
+          $pull : {
+            acceptFriend : userIdA
+          }
+        });
+        }
+        // Xóa id của B trong requestFriends của A
+        const exitUserBInA = await User.findOne({
+          _id : userIdA,
+          requestFriend : userIdB
+        });
+        if(exitUserBInA){
+          await User.updateOne({
+            _id : userIdA
+          },{
+            $pull : {
+              requestFriend:userIdB
+            }
+          });
+        }
+        })
+      // End Chức năng hủy gửi yêu cầu
     })
 
   }

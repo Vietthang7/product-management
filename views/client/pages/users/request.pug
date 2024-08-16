@@ -8,12 +8,12 @@ block main
 
     .row
       .col-12
-        +box-head("Danh sách người dùng")
+        +box-head("Lời mời đã gửi")
 
     .row
       each user in users
         .col-6
-          div(class="box-user")
+          div(class="box-user add")
             div(class="inner-avatar")
               img(
                 src=(user.avatar ? user.avatar : "/images/users.jpg")
