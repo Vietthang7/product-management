@@ -76,12 +76,27 @@ module.exports.loginPost = async (req, res) => {
     {
       expires: new Date(Date.now() + expires)
     });
+  await User.updateOne({
+    email: req.body.email,
+    deleted: false
+  }, {
+    statusOnline: "online"
+  })
   req.flash("success", "Đăng nhập thành công!");
   res.redirect("/");
 
 };
 //[GET] /user/logout
 module.exports.logout = async (req, res) => {
+  try {
+    await User.updateOne({
+      _id: res.locals.user.id
+    }, {
+      statusOnline: "offline"
+    })
+  } catch (error) {
+    console.log(e);
+  }
   res.clearCookie("tokenUser");
   res.redirect("/user/login");
 };
@@ -215,16 +230,16 @@ module.exports.editProfile = async (req, res) => {
 }
 // [PATCH] /user/edit
 module.exports.editPatch = async (req, res) => {
-    try {
-      const tokenUser = req.cookies.tokenUser;
-      await User.updateOne({
-        tokenUser: tokenUser,
-        deleted: false
-      }, req.body);
-      req.flash("success", "Cập nhật thông tin thành công!");
+  try {
+    const tokenUser = req.cookies.tokenUser;
+    await User.updateOne({
+      tokenUser: tokenUser,
+      deleted: false
+    }, req.body);
+    req.flash("success", "Cập nhật thông tin thành công!");
 
-    } catch (error) {
-      req.flash("error", "Cập nhật không thành công!");
-    }
-    res.redirect("back");
+  } catch (error) {
+    req.flash("error", "Cập nhật không thành công!");
+  }
+  res.redirect("back");
 }

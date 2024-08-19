@@ -142,4 +142,16 @@ socket.on("SERVER_RETURN_ID_CANCEL_FRIEND", (data) => {
 })
 // END SERVER_RETURN_ID_CANCEL_FRIEND
 
+// SERVER_RETURN_ID_ACCEPT_FRIEND
+socket.on("SERVER_RETURN_ID_ACCEPT_FRIEND", (data) => {
+  const dataUsersNotAccept = document.querySelector(`[data-users-not-friend="${data.userIdB}"]`);
+  if (dataUsersNotAccept) {
+    const boxUserA = dataUsersNotAccept.querySelector(`[user-id="${data.userIdA}"]`);
+    if (boxUserA) {
+      dataUsersNotAccept.removeChild(boxUserA);
+    }
+  }
+})
+//END SERVER_RETURN_ID_ACCEPT_FRIEND
+
 
