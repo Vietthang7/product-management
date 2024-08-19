@@ -191,22 +191,25 @@ module.exports.edit = async (req, res) => {
     res.redirect(`/${systemConfig.prefixAdmin}/orders`);
   }
 }
-// //[GET] /orders/update/:productId/:quantity
-// module.exports.update = async (req, res) => {
-//   try {
-//     const orderId = req.params.id;
-//     const productId = req.params.productId;
-//     const quantity = parseInt(req.params.quantity);
-//     await Order.updateOne({
-//       _id: orderId,
-//       'products.productId' : productId
-//     }, {
-//       $set: {
-//         'products.$.quantity' : quantity
-//       }
-//     });
-//     res.redirect("back");
-//   } catch (error) {
-//     res.redirect("/cart");
-//   }
-// }
+//[PATCH] /orders/update/:id/:productId/:quantity
+module.exports.update = async (req, res) => {
+  // try {
+    const orderId = req.params.id;
+    const productId = req.params.productId;
+    const quantity = parseInt(req.params.quantity);
+    console.log(orderId);
+    console.log(productId);
+    console.log(quantity);
+  //   await Order.updateOne({
+  //     _id: orderId,
+  //     'products.productId' : productId
+  //   }, {
+  //     $set: {
+  //       'products.$.quantity' : quantity
+  //     }
+  //   });
+  //   res.redirect("back");
+  // } catch (error) {
+  //   res.redirect("/cart");
+  // }
+}

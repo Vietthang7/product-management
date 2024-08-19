@@ -79,6 +79,7 @@ block main
                   td #{product.productInfo.priceNew}$
                   td
                     input(
+                      link=`/${prefixAdmin}/orders/edit/${order.id}`
                       type="number"
                       name="quantity"
                       value=product.quantity
