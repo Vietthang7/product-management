@@ -108,6 +108,24 @@ socket.on("SERVER_RETURN_INFO_ACCEPT_FRIEND", (data) => {
     `;
 
     dataUsersAccept.appendChild(boxUserA);
+    // Bắt sự kiện cho nút xóa
+    const buttonRefuse = boxUserA.querySelector("[btn-refuse-friend]");
+    buttonRefuse.addEventListener("click", () => {
+      // Việc 1: Thêm class "refuse" cho box-user
+      buttonRefuse.closest(".box-user").classList.add("refuse");
+      // Việc 2: Gửi lên server userIdA
+      const userIdA = buttonRefuse.getAttribute("btn-refuse-friend");
+      socket.emit("CLIENT_REFUSE_FRIEND", userIdA);
+    })
+    //Bắt sự kiện cho nút chấp nhận
+    const buttonAccept = boxUserA.querySelector("[btn-accept-friend]");
+    buttonAccept.addEventListener("click", () => {
+      // Việc 1 :Thêm class "accepted" cho box-user
+      buttonAccept.closest(".box-user").classList.add("accepted");
+      // Việc 2: Gửi lên server userIdA
+      const userIdA = buttonAccept.getAttribute("btn-accept-friend");
+      socket.emit("CLIENT_ACCEPT_FRIEND", userIdA);
+    })
   }
 })
 // END SERVER_RETURN_INFO_ACCEPT_FRIEND
