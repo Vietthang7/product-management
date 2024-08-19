@@ -81,3 +81,33 @@ socket.on("SERVER_RETURN_LENGTH_ACCEPT_FRIEND", (data) => {
   }
 })
 // END SERVER_RETURN_LENGTH_ACCEPT_FRIEND
+
+// SERVER_RETURN_INFO_ACCEPT_FRIEND
+socket.on("SERVER_RETURN_INFO_ACCEPT_FRIEND", (data) => {
+  const dataUsersAccept = document.querySelector(`[data-users-accept="${data.userIdB}"]`);
+  console.log(dataUsersAccept);
+  if (dataUsersAccept) {
+    const boxUserA = document.createElement("div");
+    boxUserA.classList.add("col-6");
+    boxUserA.innerHTML = `
+      <div class="box-user">  
+        <div class="inner-avatar">  
+          <img src="${data.infoA.avatar ? data.infoA.avatar : '/images/users.jpg'}" alt="${data.infoA.fullName}">  
+    </div>  
+    <div class="inner-info">  
+        <div class="inner-name">${data.infoA.fullName}</div>  
+        <div class="inner-buttons">  
+            <button class="btn btn-sm btn-primary mr-1" btn-accept-friend="${data.infoA._id}">Chấp nhận</button>  
+            <button class="btn btn-sm btn-primary mr-1" btn-refuse-friend="${data.infoA._id}">Xóa</button>  
+            <button class="btn btn-sm btn-primary mr-1" btn-deleted-friend disabled>Đã xóa</button>  
+            <button class="btn btn-sm btn-primary mr-1" btn-accepted-friend>Đã chấp nhận</button>  
+        </div>  
+    </div>  
+</div>
+    `;
+
+    dataUsersAccept.appendChild(boxUserA);
+  }
+})
+// END SERVER_RETURN_INFO_ACCEPT_FRIEND
+
