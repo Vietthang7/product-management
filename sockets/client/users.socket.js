@@ -1,5 +1,5 @@
 const User = require("../../models/user.model");
-
+const RoomChat = require("../../models/rooms-chat.model");
 module.exports = (req, res) => {
   const userIdA = res.locals.user.id;
   _io.once("connection", (socket) => {
@@ -51,9 +51,9 @@ module.exports = (req, res) => {
         infoA: infoA
       });
       //Lấy id của A gửi cho B
-      socket.broadcast.emit("SERVER_RETURN_ID_ACCEPT_FRIEND",{
-        userIdA : userIdA,
-        userIdB : userIdB
+      socket.broadcast.emit("SERVER_RETURN_ID_ACCEPT_FRIEND", {
+        userIdA: userIdA,
+        userIdB: userIdB
       })
     })
     // End khi A gửi yêu cầu cho B
@@ -100,14 +100,30 @@ module.exports = (req, res) => {
 
       // Trả về cho B id của A
       socket.broadcast.emit("SERVER_RETURN_ID_CANCEL_FRIEND", {
-        userIdA : userIdA,
-        userIdB : userIdB
+        userIdA: userIdA,
+        userIdB: userIdB
       });
     })
     // End Chức năng hủy gửi yêu cầu
 
     // Chức năng chấp nhận kết bạn
     socket.on("CLIENT_ACCEPT_FRIEND", async (userIdB) => {
+      try {
+        // Tạo phòng chat chung
+        const roomChat = new RoomChat({
+          typeRoom: "friend",
+          users: [
+            {
+              userId: userIdA,
+              role: "superAdmin"
+            },
+            {
+              userId: userIdB,
+              role: "superAdmin"
+            }
+          ]
+        });
+        await roomChat.save();
       // Thêm {userId, roomChatId} của B vào friendsList của A
       // Xóa id của B trong acceptFriends của A
       const existUserBInA = await User.findOne({
@@ -122,7 +138,7 @@ module.exports = (req, res) => {
           $push: {
             friendsList: {
               userId: userIdB,
-              roomChatId: ""
+              roomChatId: roomChat.id
             }
           },
           $pull: {
@@ -145,7 +161,7 @@ module.exports = (req, res) => {
           $push: {
             friendsList: {
               userId: userIdA,
-              roomChatId: ""
+              roomChatId: roomChat.id
             }
           },
           $pull: {
@@ -153,7 +169,9 @@ module.exports = (req, res) => {
           }
         });
       }
-
+    } catch(error){
+      console.log(error);
+    }
     })
     // End Chức năng chấp nhận kết bạn
 

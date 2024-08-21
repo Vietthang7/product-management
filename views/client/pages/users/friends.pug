@@ -22,9 +22,9 @@ block main
             div(class="inner-info")
               div(class="inner-name") #{user.fullName}
               div(class="inner-buttons")
-                button(
+                a(
                   class="btn btn-sm btn-primary mr-1"
-                  btn-message-friend
+                  href=`/chat/${user.roomChatId}`
                 ) Nhắn tin
                 button(
                   class="btn btn-sm btn-primary mr-1"
