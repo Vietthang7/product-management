@@ -1,0 +1,44 @@
+extends ../../layouts/default.pug
+
+block main
+  h2 Thông tin khách hàng
+  if (order.userInfo.fullName)
+    h6(class="mb-4") Tên khách hàng: #{order.userInfo.fullName}
+
+  if (order.userInfo.phone)
+    div(class="mb-4") Số điện thoại: #{order.userInfo.phone}
+
+  if (order.userInfo.address)
+    div(class="mb-4") Địa chỉ: #{order.userInfo.address}
+  .row  
+    .col-12  
+      h3 Thông tin đơn hàng  
+      table(class="table table-bordered" order)  
+        thead  
+          tr  
+            th STT  
+            th Ảnh  
+            th Tên  
+            th Giá  
+            th Số lượng  
+            th Tổng tiền   
+        tbody  
+          if(order.products.length > 0)  
+            each product, index in order.products  
+              tr  
+                td #{index + 1}  
+                td  
+                  img(  
+                    src=product.productInfo.thumbnail  
+                    alt=product.productInfo.title  
+                    width="80px"  
+                  )  
+                td  
+                  a(  
+                    href=`/products/detail/${product.productInfo.slug}`  
+                  ) #{product.productInfo.title}  
+                td #{product.productInfo.priceNew}$  
+                td #{product.quantity}
+                td #{product.totalPrice}$
+      if(order.products.length > 0)  
+        h3(class="text-right") Tổng đơn hàng: #{order.totalPrice}$

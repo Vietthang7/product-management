@@ -15,7 +15,10 @@ const orderSchema = new mongoose.Schema({
       quantity : Number
     }
   ],
-  totalPrice: { type: Number, default: 0 },
+  totalPrice: {  
+    type: Number,  
+    default: 0 // giá trị mặc định là 0  
+  },  
   status: String,
   deleted: {
     type: Boolean,

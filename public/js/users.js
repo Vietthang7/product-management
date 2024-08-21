@@ -167,5 +167,3 @@ socket.on("SERVER_RETURN_USER_ONLINE", (data) => {
   }
 })
 //END SERVER_RETURN_USER_ONLINE
-
-
