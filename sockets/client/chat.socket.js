@@ -4,13 +4,16 @@ module.exports = (req, res) => {
   try {
   const userId = res.locals.user.id;
   const fullName = res.locals.user.fullName;
+  const roomChatId = req.params.roomChatId;
   //SocketIO
   _io.once('connection', (socket) => {
+    socket.join(roomChatId);
     // CLIENT_SEND_MESSAGE
     socket.on("CLIENT_SEND_MESSAGE", async (data) => {
       const chatData = {
         userId: userId,
-        content: data.content
+        content: data.content,
+        roomChatId : roomChatId
       };
       const linkImages = [];
       for (const image of data.images) {
@@ -22,7 +25,7 @@ module.exports = (req, res) => {
       const chat = new Chat(chatData);
       await chat.save();
       // Trả tin nhắn realtime về cho mọi người
-      _io.emit("SERVER_RETURN_MESSAGE", {
+      _io.to(roomChatId).emit("SERVER_RETURN_MESSAGE", {
         userId: userId,
         fullName: fullName,
         content: data.content,
@@ -31,7 +34,7 @@ module.exports = (req, res) => {
     })
     //CLIENT_SEND_TYPING
     socket.on("CLIENT_SEND_TYPING", (type) => {
-      socket.broadcast.emit("SERVER_RETURN_TYPING", {
+      socket.broadcast.to(roomChatId).emit("SERVER_RETURN_TYPING", {
         userId: userId,
         fullName: fullName,
         type: type
