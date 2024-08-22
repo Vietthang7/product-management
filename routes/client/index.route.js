@@ -11,6 +11,7 @@ const settingMiddleware = require("../../middlewares/client/setting.middleware")
 const chatRoute = require("./chat.route");
 const usersRoute = require("./users.route");
 const postRoute = require("./post.route");
+const roomChatRoute = require("./rooms-chat.route");
 module.exports.index = (app) => {
     app.use(categoryMiddleware.productCategory);
     app.use(categoryMiddleware.articleCategory);
@@ -25,5 +26,6 @@ module.exports.index = (app) => {
     app.use("/user",userRoute);
     app.use("/posts",postRoute);
     app.use("/chat",userMiddleware.requireAuth,chatRoute);
+    app.use("/rooms-chat",userMiddleware.requireAuth,roomChatRoute);
     app.use("/users",userMiddleware.requireAuth,usersRoute);
 }

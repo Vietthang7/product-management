@@ -45,5 +45,4 @@ module.exports = (req, res) => {
   } catch (error) {
     res.redirect("/chat");
   }
-  
 }
