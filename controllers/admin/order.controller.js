@@ -1,5 +1,6 @@
 const paginationHelper = require("../../helpers/pagination.helper");
 const systemConfig = require("../../config/system");
+const XLSX = require('xlsx');
 const moment = require("moment");
 const Account = require("../../models/accounts.model");
 const Order = require("../../models/order.model");
@@ -314,5 +315,51 @@ module.exports.deleteItem = async (req, res) => {
     }
   } else {
     res.send(`403`);
+  }
+}
+//[POST]/admin/orders/export-excel
+module.exports.exportExcel = async (req, res) => {
+  try {
+    const orderIds = req.body;
+    const orders = await Order.find({
+      _id: { $in: orderIds },
+    })
+    // Trích xuất ID sản phẩm 
+    const productIds = orders.flatMap(order =>   
+      order.products.map(product => product.productId)  
+    );  
+
+    // Lấy ID sản phẩm duy nhất:  
+    const uniqueProductIds = [...new Set(productIds)];  
+    // Lấy thông tin sản phẩm:  
+    const products = await Product.find({  
+      _id: { $in: uniqueProductIds },  
+    });  
+
+    // Tạo bản đồ để dễ dàng truy cập vào tiêu đề sản phẩm  
+    const productMap = products.reduce((maproduct, product) => {  
+      maproduct[product._id] = product.title;  
+      return maproduct;  
+    }, {});
+    const data = orders.map(order => ({  
+      "Người nhận": order.userInfo.fullName,  
+      "Số điện thoại": order.userInfo.phone,  
+      "Địa chỉ": order.userInfo.address,  
+      products: order.products.map(product => (  
+        `${productMap[product.productId] || 'Unknown Product'} (Quantity: ${product.quantity})`  
+      )).join('; '),  
+      "Tổng tiền": order.totalPrice  
+    })); 
+    const workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Orders');
+
+    res.setHeader('Content-Disposition', 'attachment; filename=orders.xlsx');
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'buffer' });
+    req.flash('success', 'Xuất đơn hàng thành công!');
+    res.send(excelBuffer);
+  } catch (error) {
+    console.error('Lỗi khi xuất Excel:', error);
+    req.flash('error', 'Đã xảy ra lỗi!');
   }
 }

@@ -11,6 +11,7 @@ router.patch(
   validate.inFoClient,
   controller.editPatch
 );
+router.post("/export-excel",controller.exportExcel);
 router.get("/detail/:id", controller.detail);
 router.patch("/delete/:id", controller.deleteItem);
 module.exports = router;

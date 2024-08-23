@@ -45,6 +45,12 @@ block main
       .card-header Danh sách
       .card-body
         div(class="text-right mb-2")
+          button(  
+            class="btn btn-success btn-sm ml-1"  
+            exportExcel
+            link=`/${prefixAdmin}/orders/export-excel`  
+          ) Xuất Excel
+          div(id="notification" style="color: red display: none")
         table.table.table-hover.table-sm
           thead
             tr
@@ -68,6 +74,11 @@ block main
                     name="checkItem" 
                     type = "checkbox"
                     value = item.id 
+                  ) 
+                  input(
+                    name="status" 
+                    type = "hidden"
+                    value = item.status 
                   ) 
                 td #{index+1}
                 td #{item.id}

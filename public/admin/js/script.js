@@ -471,3 +471,74 @@ if (listInputQuantity.length > 0) {
   });
 }
 // Hết Cập nhật số lượng sản phẩm trong đơn hàng admin(chỉ hiện demo bên FE)
+
+
+// Bắt sự kiện xuất file Excel
+const exportExcel = document.querySelector("[exportExcel]");
+exportExcel.addEventListener("click", () => {
+  // Hàm hiển thị thông báo  
+  const showNotification = (message) => {
+    const notificationElement = document.getElementById("notification");
+    notificationElement.textContent = message;
+    notificationElement.style.display = "block"; // Hiển thị thông báo  
+  };
+  const hideNotification = () => {
+    const notificationElement = document.getElementById("notification");
+    notificationElement.style.display = "none"; // Ẩn thông báo  
+  }
+  const selectedOrders = [];
+  const checkboxes = document.querySelectorAll('input[name="checkItem"]:checked');
+  // Biến kiểm tra xem có đơn hàng inactive nào không  
+  let hasInactiveOrders = false;
+  checkboxes.forEach((checkbox) => {
+    const statusInput = checkbox.nextElementSibling; // ô trạng thái ngay sau ô checkbox
+
+    // Kiểm tra xem checkbox có được chọn có là trạng thái active
+    if (statusInput.value === "active") {
+      selectedOrders.push(checkbox.value);
+    }
+    else {
+      hasInactiveOrders = true; // Đánh dấu nếu có trạng thái inactive 
+    }
+  });
+  // Kiểm tra tình trạng các đơn hàng  
+  if (hasInactiveOrders) {
+    // Nếu có đơn hàng chưa được xác nhận, hiển thị thông báo  
+    showNotification("Bạn đã chọn các đơn hàng chưa được xác nhận. Vui lòng chỉ chọn các đơn hàng đã xác nhận");
+  } else if (selectedOrders.length > 0) {
+    // Xuất file nếu có đơn hàng hợp lệ  
+    const link = exportExcel.getAttribute("link");
+    fetch(link, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(selectedOrders),
+    })
+      .then(response => {
+        if (response.ok) {
+          return response.blob(); // Nhận file blob  
+        }
+        throw new Error('Có lỗi xảy ra khi xuất file!');
+      })
+      .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'orders.xlsx'; // Tên file xuất  
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.location.reload();
+      })
+      .catch(error => {
+        alert(error.message);
+      });
+    hideNotification();
+  } else {
+    // Nếu không có đơn hàng nào hợp lệ  
+    showNotification("Không có đơn hàng nào được xác nhận để xuất file.");
+  }
+})
+  // End Bắt sự kiện xuất file Excel
+  
