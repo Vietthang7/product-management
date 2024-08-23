@@ -89,7 +89,7 @@ module.exports.index = async (req, res) => {
       }
     }
     // Cập nhật totalPrice vào cơ sở dữ liệu  
-  await Order.updateOne({ _id: item._id }, { totalPrice: item.totalPrice });
+    await Order.updateOne({ _id: item._id }, { totalPrice: item.totalPrice });
   }
   res.render("admin/pages/orders/index", {
     pageTitle: "Trang danh sách đơn hàng",
@@ -285,14 +285,27 @@ module.exports.deleteItem = async (req, res) => {
   if (res.locals.role.permissions.includes("orders_delete")) {
     try {
       const id = req.params.id;
-      await Order.updateOne({
+      //Tìm đơn hàng để lấy thông tin sản phẩm
+      const order = await Order.findOne({
         _id: id
-      }, {
-
-        deleted: true,
-        deletedBy: res.locals.account.id
       });
-      req.flash('success', 'Đã chuyển vào thùng rác!');
+      // Lặp qua từng sản phẩm trong đơn hàng để cập nhật số lượng sản phẩm
+      for (const item of order.products) {
+        const productId = item.productId;
+        const addQuantity = item.quantity;
+        // Cập nhật số lượng sản phẩm trong bản ghi Product
+        await Product.updateOne(
+          {
+            _id: productId,
+          }, {
+          $inc: { stock: addQuantity }
+        }
+        );
+      }
+      await Order.deleteOne({
+        _id: id
+      });
+      req.flash('success', 'Đã xóa đơn hàng!');
       res.json({
         code: 200
       })
@@ -300,109 +313,6 @@ module.exports.deleteItem = async (req, res) => {
       res.redirect(`/${systemConfig.prefixAdmin}/orders`);
     }
   } else {
-    res.send(`403`);
-  }
-}
-// [GET] /admin/orders/trash
-module.exports.trash = async (req, res) => {
-  let find = {
-    deleted: true
-  };
-  if (req.query.status) {
-    find.status = req.query.status;
-  }
-  // Tìm kiếm 
-  let keyword = "";
-  if (req.query.keyword) {
-    const regex = new RegExp(req.query.keyword, "i");
-    find = {
-      $or: [
-        { 'userInfo.fullName': regex }, // Tìm theo tên khách hàng  
-        mongoose.Types.ObjectId.isValid(req.query.keyword) ? { '_id': new mongoose.Types.ObjectId(req.query.keyword) } : { _id: null } // Tìm theo ID đơn hàng nếu hợp lệ
-      ]
-    };
-    keyword = req.query.keyword;
-  }
-  // Hết tìm kiếm
-
-  // Phân trang
-  const pagination = await paginationHelper.paginationOrder(req, find);
-
-  // Hết phân trang
-  //Sắp xếp
-  const sort = {};
-  if (req.query.sortKey && req.query.sortValue) {
-    sort[req.query.sortKey] = req.query.sortValue;
-  } else {
-    sort.createdAt = "desc";
-  }
-  // Hết sắp xếp
-  const orders = await Order
-    .find(find)
-    .limit(pagination.limitItems) // số lượng tối thiểu 
-    .skip(pagination.skip) // bỏ qua
-    .sort(sort);
-
-  for (const item of orders) {
-    if (item.userInfo.fullName) {
-      const userCreated = item.userInfo.fullName
-      item.createdByFullName = userCreated;
-    } else {
-      item.createdByFullName = "";
-    }
-    item.createdAtFormat = moment(item.createdAt).format("DD/MM/YY HH:mm:ss");
-    // Người cập nhật
-    if (item.updatedBy) {
-      const accountUpdated = await Account.findOne({
-        _id: item.updatedBy
-      });
-      item.updatedByFullName = accountUpdated.fullName;
-    } else {
-      item.updatedByFullName = "";
-    }
-    item.updatedAtFormat = moment(item.updatedAt).format("DD/MM/YY HH:mm:ss");
-
-    // Tính tổng giá đơn hàng
-    item.totalPrice = 0;
-    item.totalQuantity = 0;
-    if (item.products.length > 0) {
-      for (const product of item.products) {
-        const priceNew = (1 - product.discountPercentage / 100) * product.price;
-        item.totalQuantity += product.quantity;
-        const totalPrice = priceNew * product.quantity;
-        item.totalPrice += totalPrice;
-      }
-    }
-  }
-  res.render("admin/pages/orders/trash", {
-    pageTitle: "Trang thùng rác",
-    orders: orders,
-    keyword: keyword,
-    pagination: pagination
-  });
-}
-// [PATCH] /admin/orders/trash/restore/:id
-module.exports.restore = async (req, res) => {
-  if (res.locals.role.permissions.includes("orders_edit")) {
-    try {
-      const id = req.params.id;
-      await Order.updateOne({
-        _id: id
-
-      }, {
-        deleted: false,
-        updatedBy: res.locals.account.id
-      });
-      req.flash('success', 'Khôi phục đơn hàng thành công!');
-
-      res.json({
-        code: 200
-      });
-    } catch (error) {
-      res.redirect(`/${systemConfig.prefixAdmin}/orders/trash`);
-    }
-  }
-  else {
     res.send(`403`);
   }
 }

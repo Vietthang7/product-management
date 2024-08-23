@@ -55,7 +55,7 @@ module.exports.orderPost = async (req, res) => {
   for (const item of cart.products) {
     await Product.updateOne(
       { _id: item.productId },
-      { $inc: { stock: -1 } }  // Giảm số lượng hàng tồn kho
+      { $inc: { stock: -item.quantity } }  // Giảm số lượng hàng tồn kho
     );
   }
   await Cart.updateOne({

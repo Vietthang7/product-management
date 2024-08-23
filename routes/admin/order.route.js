@@ -13,6 +13,4 @@ router.patch(
 );
 router.get("/detail/:id", controller.detail);
 router.patch("/delete/:id", controller.deleteItem);
-router.get("/trash",controller.trash);
-router.patch("/trash/restore/:id", controller.restore);
 module.exports = router;
