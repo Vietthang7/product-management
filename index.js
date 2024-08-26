@@ -1,5 +1,4 @@
 const express = require("express");
-
 require('dotenv').config();
 const bodyParser = require('body-parser');
 const flash = require('express-flash');
@@ -35,9 +34,7 @@ app.use(express.static(`${__dirname}/public`));
 // parse application/json
 app.use(bodyParser.json());
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }));
-
-
+app.use(bodyParser.urlencoded({ extended: false }));  
 app.locals.prefixAdmin = systemConfig.prefixAdmin;// chỉ dùng trong các file pug
 routeClient.index(app);
 
