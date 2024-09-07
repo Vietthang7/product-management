@@ -1,6 +1,6 @@
 const axios = require("axios");
-var accessKey = 'F8BBA842ECF85';
-var secretKey = 'K951B6PE1waDMi640xX08PD3vg6EkVlz';
+var accessKey = process.env.ACCESS_KEY;
+var secretKey = process.env.SECRET_KEY;  
 const crypto = require('crypto');
 module.exports.paymentMoMo = async (res, totalPrice, idOrder) => {
   //https://developers.momo.vn/#/docs/en/aiov2/?id=payment-method
@@ -58,7 +58,6 @@ module.exports.paymentMoMo = async (res, totalPrice, idOrder) => {
   let result;
   try {
     result = await axios(option);
-    console.log(result.data);
     return result.data;
   } catch (error) {
     return "Lỗi";
