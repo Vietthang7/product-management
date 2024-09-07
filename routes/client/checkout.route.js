@@ -4,6 +4,10 @@ const validate = require("../../validates/client/order.validate.js");
 
 const controller = require("../../controllers/client/checkout.controller.js");
 router.get("/", controller.index);
+router.get("/payment", controller.payMent);
+// router.post("/callback", controller.orderPostAPI);
+// router.post("/callback", controller.callback);
+// router.post("/callback", controller.callbackHandler);
 router.post("/order",
   validate.inFoUserOrder,
   controller.orderPost

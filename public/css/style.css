@@ -543,3 +543,7 @@
   margin-bottom: 3px;
 }
 /* End box-room */
+.paying-qr{
+  height: 200px;
+  width: auto;
+}

@@ -20,6 +20,7 @@ const orderSchema = new mongoose.Schema({
     default: 0 // giá trị mặc định là 0  
   },  
   status: String,
+  payment : String,
   deleted: {
     type: Boolean,
     default: false
