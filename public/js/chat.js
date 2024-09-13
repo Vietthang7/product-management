@@ -1,6 +1,4 @@
 import * as Popper from 'https://cdn.jsdelivr.net/npm/@popperjs/core@^2/dist/esm/index.js';
-
-//Typing
 const inputChat = document.querySelector(".chat .inner-form input[name='content']");
 var typingTimeOut;
 if (inputChat) {
@@ -53,11 +51,13 @@ if (formChat) {
 
     const content = event.target.content.value || "";
     const images = upload.cachedFileArray;
-    if (content || images.length > 0) {
+    console.log(content);
+    if (content) {
       socket.emit("CLIENT_SEND_MESSAGE", {
         content: content,
         images: images
       });
+
       event.target.content.value = "";
       upload.resetPreviewPanel();
       socket.emit("CLIENT_SEND_TYPING", "hidden");
@@ -168,16 +168,16 @@ if (buttonIcon) {
 document.addEventListener("click", (event) => {
   const buttonIcon = document.querySelector("[button-icon]");
   const tooltip = document.querySelector('.tooltip');
-  if(tooltip){
-  if (!buttonIcon.contains(event.target) && !tooltip.contains(event.target) && tooltip.classList.contains('shown')) {
-    tooltip.classList.remove('shown');
+  if (tooltip) {
+    if (!buttonIcon.contains(event.target) && !tooltip.contains(event.target) && tooltip.classList.contains('shown')) {
+      tooltip.classList.remove('shown');
+    }
   }
-}
 });
 
 // Preview Image
 const bodyChatPreviewImage = document.querySelector(".chat .inner-body");
-if(bodyChat) {
+if (bodyChat) {
   new Viewer(bodyChatPreviewImage);
 }
 // End Preview Image
