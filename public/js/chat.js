@@ -51,13 +51,11 @@ if (formChat) {
 
     const content = event.target.content.value || "";
     const images = upload.cachedFileArray;
-    console.log(content);
-    if (content) {
+    if (content || images.length > 0) {
       socket.emit("CLIENT_SEND_MESSAGE", {
         content: content,
         images: images
       });
-
       event.target.content.value = "";
       upload.resetPreviewPanel();
       socket.emit("CLIENT_SEND_TYPING", "hidden");
