@@ -26,8 +26,9 @@ global._io = io;
 app.use(cookieParser('HHKALKS'));
 app.use(session({ cookie: { maxAge: 60000 } }));
 app.use(flash());
-app.use(methodOverride('_method'));
 //End Flash
+app.use(methodOverride('_method'));
+
 app.set("views", `${__dirname}/views`);
 app.set("view engine", "pug");
 app.use('/tinymce', express.static(path.join(__dirname, 'node_modules', 'tinymce')));
