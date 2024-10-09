@@ -15,7 +15,10 @@ const routeAdmin = require("./routes/admin/index.route");
 
 const routeClient = require("./routes/client/index.route");
 const systemConfig = require("./config/system");
+// Thanh toán online
 const Order = require("./models/order.model");
+const Cart = require("./models/cart.model");
+// End Thanh toán online
 const app = express();
 const port = process.env.PORT;
 //SocketIO
@@ -38,7 +41,7 @@ app.use(bodyParser.json());
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
 app.locals.prefixAdmin = systemConfig.prefixAdmin;// chỉ dùng trong các file pug
-
+// Call API MOMO
 app.post('/callback', async (req, res) => {
   const { orderId, resultCode } = req.body;
   if(resultCode == 0){
@@ -46,9 +49,13 @@ app.post('/callback', async (req, res) => {
     _id: orderId
   }, {
     payment : "paid"
-  })
+  });
+  // Xóa giỏ hàng  
+  const cartId = req.cookies.cartId;
+  await Cart.updateOne({ _id: cartId }, { products: [] });
 }
 })
+// End Call API MOMO
 routeClient.index(app);
 
 

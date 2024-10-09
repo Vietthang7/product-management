@@ -130,7 +130,7 @@ module.exports.orderPost = async (req, res) => {
     totalPrice = totalPrice.toString();
     const result = await paymetHelper.paymentMoMo(res, totalPrice, idOrder);
     // Xóa giỏ hàng  
-    await Cart.updateOne({ _id: cartId }, { products: [] });
+    // await Cart.updateOne({ _id: cartId }, { products: [] });
     res.redirect(result.shortLink);
   }
 };

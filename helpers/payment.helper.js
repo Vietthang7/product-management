@@ -1,14 +1,14 @@
 const axios = require("axios");
 var accessKey = process.env.ACCESS_KEY;
-var secretKey = process.env.SECRET_KEY;  
+var secretKey = process.env.SECRET_KEY;
 const crypto = require('crypto');
 module.exports.paymentMoMo = async (res, totalPrice, idOrder) => {
   //https://developers.momo.vn/#/docs/en/aiov2/?id=payment-method
   //parameters
   var orderInfo = 'pay with MoMo';
   var partnerCode = 'MOMO';
-  var redirectUrl = `https://30e1-171-242-233-122.ngrok-free.app/checkout/success/${idOrder}`;
-  var ipnUrl = 'https://30e1-171-242-233-122.ngrok-free.app/callback';
+  var redirectUrl = `https://product-management-de2p.onrender.com/checkout/success/${idOrder}`;
+  var ipnUrl = 'https://product-management-de2p.onrender.com/callback';
   var requestType = "payWithMethod";
   var amount = totalPrice;
   var orderId = idOrder;
@@ -17,7 +17,6 @@ module.exports.paymentMoMo = async (res, totalPrice, idOrder) => {
   var orderGroupId = '';
   var autoCapture = true;
   var lang = 'vi';
-  const responseTime = 172172912; 
 
   //before sign HMAC SHA256 with format
   //accessKey=$accessKey&amount=$amount&extraData=$extraData&ipnUrl=$ipnUrl&orderId=$orderId&orderInfo=$orderInfo&partnerCode=$partnerCode&redirectUrl=$redirectUrl&requestId=$requestId&requestType=$requestType
@@ -45,7 +44,6 @@ module.exports.paymentMoMo = async (res, totalPrice, idOrder) => {
     extraData: extraData,
     orderGroupId: orderGroupId,
     signature: signature,
-    responseTime: responseTime,
   });
   // option for axios
   const option = {
