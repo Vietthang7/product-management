@@ -62,6 +62,7 @@ block main
               th Khách hàng
               th Tổng giá
               th Số sản phẩm
+              th Hình thức
               if(role.permissions.includes("orders_edit"))
                 th Trạng thái
               th Cập nhật
@@ -81,11 +82,18 @@ block main
                     value = item.status 
                   ) 
                 td #{index+1}
-                td #{item.id}
+                td #{item.idOrder}
                 td #{item.createdAtFormat}
                 td #{item.createdByFullName}
-                td #{item.totalPrice}$
+                td #{item.totalPrice}đ
                 td #{item.totalQuantity}
+                td
+                  if(item.payment=="direct")
+                    | Thanh toán khi nhận hàng
+                  if(item.payment=="paid")
+                    | Đã thanh toán 
+                  if(item.payment=="pending")
+                    | Chờ thanh toán online
                 if(role.permissions.includes("orders_edit"))
                   td
                     if(item.status == "active")

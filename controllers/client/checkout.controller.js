@@ -1,9 +1,8 @@
 const Cart = require("../../models/cart.model");
 const Product = require("../../models/product.model");
 const Order = require("../../models/order.model");
-const QRCode = require('qrcode');
-const axios = require('axios');
 const paymetHelper = require("../../helpers/payment.helper");
+const generateOrder = require("../../helpers/generateOrder.helper");
 //[GET] /checkout 
 module.exports.index = async (req, res) => {
   const cartId = req.cookies.cartId;
@@ -60,7 +59,10 @@ module.exports.orderPost = async (req, res) => {
 
   // Xử lý trường hợp thanh toán "cash_on_delivery"  
   if (req.body.paymentMethod === "cash_on_delivery") {
+    const countOrders = await Order.countDocuments({});
+    const idOrder = generateOrder.generateOrderCode(countOrders + 1);
     let orderData = {
+      idOrder: idOrder,
       userInfo: userInfo,
       products: [],
       status: "inactive",
@@ -90,7 +92,7 @@ module.exports.orderPost = async (req, res) => {
 
     // Xóa giỏ hàng  
     await Cart.updateOne({ _id: cartId }, { products: [] });
-    return res.redirect(`/checkout/success/${order.id}`);
+    return res.redirect(`/checkout/success/${order.idOrder}`);
   }
   // Xử lý trường hợp thanh toán "online_payment"  
   else if (req.body.paymentMethod === "online_payment") {
@@ -125,7 +127,7 @@ module.exports.orderPost = async (req, res) => {
     }
     const order = new Order(orderData);
     await order.save();
-    const idOrder = order.id;
+    const idOrder = order.idOrder;
     let totalPrice = cart.totalPrice;
     totalPrice = totalPrice.toString();
     const result = await paymetHelper.paymentMoMo(res, totalPrice, idOrder);
@@ -139,8 +141,9 @@ module.exports.orderPost = async (req, res) => {
 module.exports.success = async (req, res) => {
   const orderId = req.params.orderId;
   const order = await Order.findOne({
-    _id: orderId
+    idOrder: orderId
   });
+  // Cập nhật số lượng sản phẩm khi thanh toán online
   if (order.payment == "paid") {
     const cartId = req.cookies.cartId;
     const cart = await Cart.findOne({ _id: cartId });
@@ -151,6 +154,7 @@ module.exports.success = async (req, res) => {
       );
     }
   }
+  // End cập nhật số lượng sản phẩm khi thanh toán online
   let totalPrice = 0;
   for (const item of order.products) {
     const productInfo = await Product.findOne({

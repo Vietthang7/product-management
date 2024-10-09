@@ -1,103 +1,107 @@
 /* Header */
 .header {
-    border-bottom: 1px solid #ddd;
-    padding: 10px 0;
-  }
-  
-  .header .inner-logo img {
-    max-height: 50px;
-    max-width: 100%;
-  }
-  
-  .header .inner-menu > ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-      flex-wrap: wrap;
-  }
-  
-  .header .inner-menu > ul > li {
-    margin-left: 20px;
-  }
-  /* End Header */
-  
-  /* Footer */
-  .footer {
-    background: #333;
-    color: #fff;
-    text-align: center;
-    padding: 10px;
-  }
-  /* End Footer */
-  
-  /* box-head */
-  .box-head {
-    margin-bottom: 30px;
-  }
-  
-  .box-head .inner-title {
-    margin-bottom: 0;
-    font-size: 28px;
-    font-weight: 600;
-    color: green;
-  }
-  /* End box-head */
+  border-bottom: 1px solid #ddd;
+  padding: 10px 0;
+}
+
+.header .inner-logo img {
+  max-height: 50px;
+  max-width: 100%;
+}
+
+.header .inner-menu>ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.header .inner-menu>ul>li {
+  margin-left: 20px;
+}
+
+/* End Header */
+
+/* Footer */
+.footer {
+  background: #333;
+  color: #fff;
+  text-align: center;
+  padding: 10px;
+}
+
+/* End Footer */
+
+/* box-head */
+.box-head {
+  margin-bottom: 30px;
+}
+
+.box-head .inner-title {
+  margin-bottom: 0;
+  font-size: 28px;
+  font-weight: 600;
+  color: green;
+}
+
+/* End box-head */
 
 /* product-item */
 .product-item {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  
-  .product-item .inner-image {
-    width: 100%;
-    aspect-ratio: 4/3;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  .product-item .inner-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  .product-item .inner-content {
-    padding: 15px;
-  }
-  
-  .product-item .inner-content .inner-title {
-    font-size: 20px;
-    font-weight: 600;
-  }
-  
-  .product-item .inner-content .inner-price-new {
-    font-size: 18px;
-    font-weight: 600;
-    color: green;
-  }
-  
-  .product-item .inner-content .inner-price-old {
-    font-size: 18px;
-    font-weight: 600;
-    color: red;
-      text-decoration: line-through;
-  }
-  
-  .product-item .inner-content .inner-discount {
-    font-size: 14px;
-    font-weight: 600;
-    color: white;
-    background: red;
-    display: inline-block;
-    padding: 3px 10px;
-    border-radius: 8px;
-  }
-  /* End product-item */
-  /* sub-menu */
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.product-item .inner-image {
+  width: 100%;
+  aspect-ratio: 4/3;
+  border-bottom: 1px solid #ddd;
+}
+
+.product-item .inner-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.product-item .inner-content {
+  padding: 15px;
+}
+
+.product-item .inner-content .inner-title {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.product-item .inner-content .inner-price-new {
+  font-size: 18px;
+  font-weight: 600;
+  color: green;
+}
+
+.product-item .inner-content .inner-price-old {
+  font-size: 18px;
+  font-weight: 600;
+  color: red;
+  text-decoration: line-through;
+}
+
+.product-item .inner-content .inner-discount {
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  background: red;
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 8px;
+}
+
+/* End product-item */
+/* sub-menu */
 .sub-menu {
   position: relative;
   z-index: 999;
@@ -120,7 +124,7 @@
   border-bottom: 1px solid #ddd;
 }
 
-.sub-menu:hover > ul {
+.sub-menu:hover>ul {
   display: block;
 }
 
@@ -133,9 +137,10 @@
   top: 0;
 }
 
-.sub-menu ul li:hover > ul {
+.sub-menu ul li:hover>ul {
   display: block;
 }
+
 /* End sub-menu */
 /* End sub-menu */
 
@@ -194,9 +199,16 @@
   padding: 3px 6px;
   border-radius: 8px;
 }
+
 /* End product-detail */
 
 /* chat */
+.message-title {
+  font-size: 20px;
+  margin: 7px;
+  color: olivedrab;
+}
+
 .chat {
   width: 100%;
   border: 1px solid #ddd;
@@ -250,6 +262,7 @@
   background: #FE5DA3;
   color: #fff;
 }
+
 .chat .inner-body .inner-images img {
   width: 150px;
   height: 150px;
@@ -268,6 +281,7 @@
 .chat .inner-body .inner-outgoing .inner-images img {
   margin: 0 0 5px 5px;
 }
+
 .chat .inner-foot {
   border-top: 1px solid #ddd;
   padding: 10px;
@@ -296,6 +310,7 @@
   padding: 0 10px;
   cursor: pointer;
 }
+
 .chat .inner-preview-images {
   position: relative;
 }
@@ -318,12 +333,14 @@
   width: 90px;
   background-size: contain;
 }
+
 /* End chat */
 
 
-/* Thêm hiệu ứng hover cho nút gửi */  
-.chat .inner-form button:hover {  
-  background: #e03e84; /* Màu sắc khi di chuột */  
+/* Thêm hiệu ứng hover cho nút gửi */
+.chat .inner-form button:hover {
+  background: #e03e84;
+  /* Màu sắc khi di chuột */
 }
 
 /* Tooltip */
@@ -335,6 +352,7 @@
   visibility: visible;
   opacity: 1;
 }
+
 /* End Tooltip */
 /* box-typing */
 .box-typing {
@@ -374,14 +392,17 @@
 @keyframes blink {
   0% {
     opacity: 0.1;
- }
+  }
+
   20% {
     opacity: 1;
- }
+  }
+
   100% {
     opacity: 0.1;
- }
+  }
 }
+
 /* End box-typing */
 /* box-user */
 .box-user {
@@ -428,6 +449,7 @@
 .box-user.add [btn-cancel-friend] {
   display: inline-block;
 }
+
 .box-user [btn-deleted-friend] {
   display: none;
 }
@@ -459,9 +481,11 @@
 .box-user.accepted [btn-accepted-friend] {
   display: inline-block;
 }
+
 .box-user [btn-deleted-friended] {
   display: none;
 }
+
 .box-user.cancel [btn-message-friend] {
   display: none;
 }
@@ -473,6 +497,7 @@
 .box-user.cancel [btn-deleted-friended] {
   display: inline-block;
 }
+
 .box-user .inner-status {
   font-size: 12px;
   color: #00d800;
@@ -482,6 +507,7 @@
 .box-user .inner-status[status="online"] {
   opacity: 1;
 }
+
 /* End box-user */
 /* image-preview */
 .image-preview {
@@ -491,6 +517,7 @@
   border: 1px solid #ddd;
   border-radius: 5px;
 }
+
 /* End image-preview */
 /* post-detail */
 .post-detail .inner-thumb img {
@@ -542,6 +569,7 @@
   font-weight: 600;
   margin-bottom: 3px;
 }
+
 /* End box-room */
 /* show-alert */
 .show-alert {
@@ -554,4 +582,5 @@
 .show-alert.hidden {
   display: none;
 }
+
 /* End show-alert */

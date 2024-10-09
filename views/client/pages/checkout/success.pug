@@ -10,7 +10,7 @@ block main
     .row
       .col-12
         div(class="alert alert-success")
-          | Chúc mừng bạn đã đặt hàng thành công! Chúng tôi sẽ xử lý đơn hàng trong thời gian sớm nhất.
+          | Chúc mừng bạn đã đặt hàng thành công! Chúng tôi sẽ xử lý đơn hàng trong thời gian sớm nhất. Mã đơn hàng của bạn là <b>#{order.idOrder}</b>.
 
     if(order)
       .row
@@ -55,10 +55,10 @@ block main
                         width="80px"
                       )
                     td #{item.title}
-                    td #{item.priceNew}$
+                    td #{item.priceNew}đ
                     td #{item.quantity}
-                    td #{item.totalPrice}$
+                    td #{item.totalPrice}đ
 
 
           if(order.products.length > 0)
-            h3(class="text-right") Tổng đơn hàng: #{totalPrice}$
+            h3(class="text-right") Tổng đơn hàng: #{totalPrice}đ
