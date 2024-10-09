@@ -70,6 +70,11 @@ module.exports.forgotPasswordPost = async (req, res) => {
     res.redirect("back");
     return;
   }
+  if (account.status !="active") {
+    req.flash("error", "Tài khoản đã dừng hoạt động!");
+    res.redirect("back");
+    return;
+  }
   const otp = generateHelper.generateRandomNumber(6);
 
   // Việc 1: Lưu email, OTP vào database
@@ -130,9 +135,9 @@ module.exports.resetPasswordPatch = async (req, res) => {
     return;
   }
   const password = req.body.password;
-  const tokenUser = req.cookies.token;
+  const token = req.cookies.token;
   await Account.updateOne({
-    tokenUser : tokenUser,
+    token : token,
     deleted : false
   },{
     password : md5(password)

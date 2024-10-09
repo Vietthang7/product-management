@@ -112,7 +112,7 @@ module.exports.createPost = async (req, res) => {
     return;
     }
     req.body.password = md5(req.body.password);
-    req.body.token = generateHelper.generateRandomString(30);
+    req.body.tokenUser = generateHelper.generateRandomString(30);
     req.body.createdBy = res.locals.account.id;
     const user = new User(req.body);
     await user.save();

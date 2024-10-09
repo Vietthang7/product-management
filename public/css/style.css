@@ -543,7 +543,15 @@
   margin-bottom: 3px;
 }
 /* End box-room */
-.paying-qr{
-  height: 200px;
-  width: auto;
+/* show-alert */
+.show-alert {
+  position: fixed;
+  top: 70px;
+  right: 20px;
+  z-index: 999;
 }
+
+.show-alert.hidden {
+  display: none;
+}
+/* End show-alert */

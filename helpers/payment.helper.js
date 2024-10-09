@@ -17,6 +17,7 @@ module.exports.paymentMoMo = async (res, totalPrice, idOrder) => {
   var orderGroupId = '';
   var autoCapture = true;
   var lang = 'vi';
+  const responseTime = 172172912; 
 
   //before sign HMAC SHA256 with format
   //accessKey=$accessKey&amount=$amount&extraData=$extraData&ipnUrl=$ipnUrl&orderId=$orderId&orderInfo=$orderInfo&partnerCode=$partnerCode&redirectUrl=$redirectUrl&requestId=$requestId&requestType=$requestType
@@ -44,6 +45,7 @@ module.exports.paymentMoMo = async (res, totalPrice, idOrder) => {
     extraData: extraData,
     orderGroupId: orderGroupId,
     signature: signature,
+    responseTime: responseTime,
   });
   // option for axios
   const option = {
