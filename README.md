@@ -1,5 +1,8 @@
 # Tên Dự Án
-Đây là một dự án quản lý sản phẩm và có tích hợp Socket.IO để chat Realtime
+Đây là một dự án quản lý sản phẩm và chat  
+Code theo hướng Server Side Rendering  
+Sử dụng: PUG, CSS, Javascript, NodeJS, ExpressJS, MongoDB, Mongoose, Socket.io, NPM, GIT, GITHUB  
+Link dự án: https://product-management-de2p.onrender.com
 ## Installation
 Để cài đặt dự án, hãy chạy các lệnh sau:  
 npm install
