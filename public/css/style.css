@@ -21,6 +21,24 @@
 
 .header .inner-menu>ul>li {
   margin-left: 20px;
+  background: orange;
+  padding: 6px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.header .inner-menu>ul>li:hover {
+  background: orangered;
+}
+
+.header .inner-menu>ul>li:hover>a {
+  color: white;
+  text-decoration: none;
+}
+
+.header .inner-menu>ul>li>a {
+  color: black;
+  text-decoration: none;
 }
 
 /* End Header */
@@ -114,7 +132,7 @@
   list-style: none;
   padding: 0;
   margin: 0;
-  background: #eae9e9;
+  background: orange;
   min-width: 180px;
   display: none;
 }
@@ -123,13 +141,21 @@
   padding: 10px;
   border-bottom: 1px solid #ddd;
 }
+.sub-menu ul li>a{
+  color: white;
+}
 
 .sub-menu:hover>ul {
   display: block;
+  text-decoration: none;
 }
 
 .sub-menu ul li {
   position: relative;
+}
+.sub-menu ul>li>a:hover {
+  text-decoration: none;
+  color: black;
 }
 
 .sub-menu ul li ul {
@@ -139,6 +165,7 @@
 
 .sub-menu ul li:hover>ul {
   display: block;
+  text-decoration: none;
 }
 
 /* End sub-menu */
