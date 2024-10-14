@@ -20,7 +20,12 @@ Tài khoản admin quản lí sản phẩm:
 Email:  
 nguyenthang12092004@gmail.com  
 Password:  
-qwerty12345@@
+qwerty12345@@  
+Tài khoản client:  
+Email:  
+ralatay908@fuzitea.com  
+Mật khẩu:  
+qwerty12345  
 ## Liên hệ
 Bạn có thể liên hệ qua email:  
 nguyenvietthang12092004@gmail.com
