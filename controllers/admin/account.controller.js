@@ -280,8 +280,8 @@ module.exports.changeMulti = async (req, res) => {
             _id: ids
           }, {
             deleted: true
-
           });
+          break;
         default:
           break;
       }

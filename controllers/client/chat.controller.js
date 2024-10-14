@@ -34,7 +34,7 @@ module.exports.roomChat = async (req, res) => {
     _id:roomChatId
   }).select("title");
   const titleRoomChat = roomChat.title;
-  //SocketIO
+  //SocketIOcon
   chatSocket(req, res);
   // End SocketIO
   const chats = await Chat.find({
@@ -50,6 +50,18 @@ module.exports.roomChat = async (req, res) => {
   res.render("client/pages/chat/roomchat", {
     pageTitle: "Chat",
     chats: chats,
-    titleRoomChat:titleRoomChat
+    titleRoomChat:titleRoomChat,
+    roomChatId:roomChatId
   });
+};
+
+// [GET]/chat/add-people
+module.exports.addMember = async (req, res) => {
+  const roomChatId = req.params.roomChatId;
+  console.log(roomChatId);
+  const userinRoom = await RoomChat. 
+  res.render("client/pages/chat/addMember", {
+    pageTitle: "Thêm thành viên",
+  });
+  
 };

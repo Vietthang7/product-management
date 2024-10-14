@@ -9,6 +9,8 @@ block main
     .row
       .col-12
         +box-head(titleRoomChat)
+        .inner-add-people
+          a(href=`/chat/${roomChatId}/addMember`) Thêm thành viên
     .row
       .col-12
         .chat(my-id=user.id)
@@ -51,3 +53,4 @@ block main
                 i.fa-solid.fa-paper-plane
   div(class="tooltip" role="tooltip")
     emoji-picker(class="light")
+  

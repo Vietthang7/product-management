@@ -334,6 +334,11 @@
   background-size: contain;
 }
 
+.inner-add-people {
+  display: flex;
+  justify-content: right;
+}
+
 /* End chat */
 
 

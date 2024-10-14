@@ -271,6 +271,7 @@ module.exports.changeMulti = async (req, res) => {
           }, {
             deleted: true
           });
+          break;
         default:
           break;
       }

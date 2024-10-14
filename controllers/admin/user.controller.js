@@ -348,6 +348,7 @@ module.exports.changeMulti = async (req, res) => {
             deleted: true
           });
           req.flash('success', 'Đã chuyển vào thùng rác!');
+          break;
         default:
           break;
       }
