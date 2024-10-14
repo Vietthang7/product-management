@@ -21,11 +21,12 @@ Email:
 nguyenthang12092004@gmail.com  
 Password:  
 qwerty12345@@  
-Tài khoản client (có thể đăng kí):  
+Tài khoản client:  
 Email:  
 ralatay908@fuzitea.com  
 Mật khẩu:  
 qwerty12345  
+Có thể đăng kí tài khoản khác
 ## Liên hệ
 Bạn có thể liên hệ qua email:  
 nguyenvietthang12092004@gmail.com
