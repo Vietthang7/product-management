@@ -37,8 +37,8 @@ block main
                   a(  
                     href=`/products/detail/${product.productInfo.slug}`  
                   ) #{product.productInfo.title}  
-                td #{product.productInfo.priceNew}$  
+                td #{product.productInfo.priceNew}đ  
                 td #{product.quantity}
-                td #{product.totalPrice}$
+                td #{product.totalPrice}đ
       if(order.products.length > 0)  
-        h3(class="text-right") Tổng đơn hàng: #{order.totalPrice}$
+        h3(class="text-right") Tổng đơn hàng: #{order.totalPrice}đ

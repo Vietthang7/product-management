@@ -79,7 +79,7 @@ block main
                             a(  
                               href=`/products/detail/${product.productInfo.slug}`  
                             ) #{product.productInfo.title}  
-                          td #{product.productInfo.priceNew}$  
+                          td #{product.productInfo.priceNew}đ 
                           td  
                             input(  
                               link=`/${prefixAdmin}/orders/change-quantity/${order.id}`  
@@ -92,14 +92,14 @@ block main
                             )  
                             // Thêm input ẩn cho productId  
                             input(type="hidden" name="productId[]" value=product.productId)
-                          td #{product.totalPrice}$  
+                          td #{product.totalPrice}đ  
                           td  
                             a(  
                               href=`/cart/delete/${product.productId}`  
                               class="btn btn-danger"  
                             ) Xóa  
                 if(order.products.length > 0)  
-                  h3.total-price(class="text-right") Tổng đơn hàng: #{order.totalPrice}$            
+                  h3.total-price(class="text-right") Tổng đơn hàng: #{order.totalPrice}đ            
               div(class="form-group")  
                 button(  
                   type="submit"  
